@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <radialGradient id="glow" cx="50%" cy="35%" r="75%">
+      <stop offset="0" stop-color="#202019"/>
+      <stop offset="1" stop-color="#080808"/>
+    </radialGradient>
+    <linearGradient id="accent" x1="0" x2="1">
+      <stop stop-color="#dfb94f"/>
+      <stop offset="1" stop-color="#ed3b43"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+  <circle cx="600" cy="275" r="220" fill="none" stroke="#f4f3ef" stroke-opacity=".035" stroke-width="1"/>
+  <circle cx="600" cy="275" r="270" fill="none" stroke="#f4f3ef" stroke-opacity=".025" stroke-width="1"/>
+  <path d="M0 0h18v630H0zM1182 0h18v630h-18z" fill="#dfb94f" fill-opacity=".08"/>
+
+  <g transform="translate(390 126) scale(1.305)">
+    <path fill="#f4f3ef" fill-rule="evenodd" d="M8 13h52c51 0 51 94 0 94H8V13Zm26 23v48h24c25 0 25-48 0-48H34Z"/>
+    <path fill="#f4f3ef" d="M101 13h34l27 34 27-34h34l-44 55v39h-34V68l-44-55Z"/>
+    <circle cx="267" cy="60" r="38" fill="none" stroke="#f4f3ef" stroke-width="16"/>
+    <path fill="#dfb94f" d="m258 46 25 14-25 14V46Z"/>
+  </g>
+
+  <path d="M460 374h280" stroke="url(#accent)" stroke-width="4" stroke-linecap="round"/>
+  <text x="600" y="445" fill="#f4f3ef" font-family="Arial, sans-serif" font-size="35" font-weight="700" letter-spacing="5" text-anchor="middle">EDIÇÃO DE VÍDEOS</text>
+  <text x="600" y="493" fill="#b9b8b2" font-family="Arial, sans-serif" font-size="21" letter-spacing="2" text-anchor="middle">YOUTUBE  •  TIKTOK  •  SHORTS  •  REELS</text>
+  <text x="600" y="574" fill="#dfb94f" font-family="Arial, sans-serif" font-size="18" font-weight="700" letter-spacing="4" text-anchor="middle">DYO STUDIO</text>
+</svg>

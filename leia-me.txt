@@ -44,6 +44,7 @@ projeto/
     ├── sections/about.webp     Foto da seção "Quem sou eu"
     ├── testimonials/           Fotos dos clientes
     ├── social/og-image.jpg     Imagem que aparece ao compartilhar o link
+    ├── social/og-image.svg     Arte original da imagem de compartilhamento
     └── icons/                  Ícones (contatos e programas na abertura)
 
 Não renomeie as pastas nem os arquivos. O site depende
