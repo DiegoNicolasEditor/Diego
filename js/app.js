@@ -112,6 +112,10 @@
   function initRevealAnimations() {
     const elements = qsa(".reveal");
     const staggeredGroups = [
+      ".hero-tools-list > .hero-tool",
+      ".about-meta > .meta-item",
+      ".portfolio-filters > .filter-btn",
+      ".contact-links > .contact-link",
       ".testimonials-track > .testimonial-card",
       ".site-footer .footer-brand",
       ".site-footer .footer-nav > a",
@@ -120,21 +124,30 @@
 
     staggeredGroups.forEach((selector) => {
       qsa(selector).forEach((element, index) => {
-        if (element.closest(".reveal")) return;
         element.classList.add("reveal");
         element.style.setProperty(
           "--reveal-delay",
           `${Math.min(index, 4) * 90}ms`
         );
+        element.addEventListener("transitionend", (event) => {
+          if (event.target === element) {
+            element.style.removeProperty("--reveal-delay");
+          }
+        }, { once: true });
         elements.push(element);
       });
     });
 
     if (!elements.length) return;
+    // Registra o estado oculto antes de o observador revelar os elementos.
+    void document.body.offsetHeight;
 
     // Navegadores antigos: mostra tudo
     if (!("IntersectionObserver" in window)) {
-      elements.forEach((el) => el.classList.add("is-visible"));
+      elements.forEach((el) => {
+        el.classList.add("is-visible");
+        el.style.removeProperty("--reveal-delay");
+      });
       return;
     }
 
