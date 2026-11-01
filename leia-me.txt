@@ -39,7 +39,6 @@ projeto/
     ├── brand/dyo-studio-logo.svg Logo DYO (início e rodapé)
     ├── brand/dyo-studio-icon.svg Ícone DYO (aba do navegador)
     ├── brand/foto-dyo.webp   Sua foto pessoal (guardada)
-    ├── backgrounds/hero.webp   Imagem guardada (não usada no início)
     ├── backgrounds/contact.webp Fundo da seção Contato
     ├── sections/about.webp     Foto da seção "Quem sou eu"
     ├── testimonials/           Fotos dos clientes
@@ -86,9 +85,8 @@ Modo 2 — Melhor (recomendado):
   3. Clique com o botão direito no "index.html"
   4. Escolha "Open with Live Server"
 
-Obs: no site publicado as imagens passam pelo otimizador
-da Netlify (ficam mais leves). No seu computador o site
-usa os arquivos originais — é normal e funciona igual.
+Obs: as imagens são carregadas diretamente dos arquivos
+do projeto, tanto no computador quanto no site publicado.
 
 
 --------------------------------------------------------
@@ -123,8 +121,6 @@ NOME e a mesma pasta. Não precisa mexer no código.
 
   Sua foto       → img/brand/foto-dyo.webp
                    (o rosto fica centralizado; 512x512 ou maior)
-  Imagem guardada → img/backgrounds/hero.webp
-                   (horizontal, uns 1600x900)
   Fundo do contato → img/backgrounds/contact.webp
                    (horizontal, uns 1600x900)
   Quem sou eu    → img/sections/about.webp
@@ -249,10 +245,12 @@ vídeos e as fotos reais dos clientes não mudam.
   10) COMO PUBLICAR
 --------------------------------------------------------
 
-O site já está ligado à Netlify. Pra subir manualmente:
-  1. Acesse https://app.netlify.com/drop
-  2. Arraste a PASTA INTEIRA do site
-  3. Pronto
+O site é publicado pelo GitHub Pages. Para enviar uma
+alteração pelo site do GitHub:
+  1. Acesse https://github.com/digas221960-wq/dyooo
+  2. Abra ou envie somente os arquivos que foram alterados
+  3. Confirme em "Commit changes"
+  4. Aguarde o GitHub Pages atualizar o site
 
 Se mudar o endereço do site (domínio), troque também o
 link da imagem de compartilhamento no index.html

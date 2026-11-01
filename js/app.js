@@ -43,30 +43,6 @@
       .join("");
   }
 
-  // Imagens locais passam pelo otimizador da Netlify (menores e em WebP).
-  // Abrindo o index.html direto do computador, usa o arquivo original.
-  const useImageCdn = /^https?:$/.test(window.location.protocol);
-  function imageUrl(path, width) {
-    if (!useImageCdn || /^(https?:)?\/\//.test(path)) return path;
-    const url = "/" + path.replace(/^\.?\//, "");
-    return `/.netlify/images?url=${encodeURIComponent(url)}&w=${width}&fm=webp`;
-  }
-
-  /* ---------- Imagens: se o otimizador falhar, usa o arquivo original ---------- */
-  function initImageFallbacks() {
-    qsa("img[data-fallback]").forEach((img) => {
-      const useFallback = () => {
-        if (img.dataset.fallbackUsed) return;
-        img.dataset.fallbackUsed = "true";
-        img.removeAttribute("srcset");
-        img.src = img.dataset.fallback;
-      };
-      if (!useImageCdn) return useFallback();
-      img.addEventListener("error", useFallback);
-      if (img.complete && img.naturalWidth === 0) useFallback();
-    });
-  }
-
   /* ---------- Navegação (header + menu do celular) ---------- */
   function initNavigation() {
     const header = qs("#site-header");
@@ -75,8 +51,14 @@
 
     // Escurece o header quando rola a página
     if (header) {
+      let scrollUpdatePending = false;
       const onScroll = () => {
-        header.classList.toggle("is-scrolled", window.scrollY > 10);
+        if (scrollUpdatePending) return;
+        scrollUpdatePending = true;
+        window.requestAnimationFrame(() => {
+          header.classList.toggle("is-scrolled", window.scrollY > 10);
+          scrollUpdatePending = false;
+        });
       };
       onScroll();
       window.addEventListener("scroll", onScroll, { passive: true });
@@ -232,8 +214,11 @@
     const thumbnail = document.createElement("img");
     thumbnail.src = `https://i.ytimg.com/vi/${encodeURIComponent(project.youtubeId)}/hqdefault.jpg`;
     thumbnail.alt = `Prévia do vídeo ${project.title}`;
+    thumbnail.width = 480;
+    thumbnail.height = 360;
     thumbnail.loading = "lazy";
     thumbnail.decoding = "async";
+    thumbnail.fetchPriority = "low";
     media.replaceChildren(thumbnail);
 
     const playButton = createEl("button", "video-play-button");
@@ -295,7 +280,7 @@
     } else if (project.poster) {
       // Se algum dia quiser usar imagem no lugar do vídeo
       const img = document.createElement("img");
-      img.src = imageUrl(project.poster, 900);
+      img.src = project.poster;
       img.alt = `Prévia do projeto ${project.title}`;
       img.loading = "lazy";
       img.decoding = "async";
@@ -470,18 +455,14 @@
 
     if (testimonial.avatar) {
       const img = document.createElement("img");
-      img.src = imageUrl(testimonial.avatar, 120);
+      img.src = testimonial.avatar;
       img.alt = `Foto de ${testimonial.name}`;
       img.width = 48;
       img.height = 48;
       img.loading = "lazy";
       img.decoding = "async";
-      // Se a foto falhar, tenta o arquivo original e depois as iniciais
+      // Se a foto falhar, mostra as iniciais do cliente.
       img.onerror = () => {
-        if (img.src.indexOf("/.netlify/images") !== -1) {
-          img.src = testimonial.avatar;
-          return;
-        }
         img.remove();
         avatar.textContent = getInitials(testimonial.name);
       };
@@ -652,7 +633,6 @@
 
   /* ---------- Inicia tudo ---------- */
   function init() {
-    initImageFallbacks();
     initNavigation();
     initPortfolio();
     initVideoDialog();

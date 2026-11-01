@@ -212,7 +212,6 @@ h1, h2, h3, h4 {
 .icon-tiktok      { --icon: url("../img/icons/tiktok.svg"); }
 .icon-arrow-right { --icon: url("../img/icons/arrow-right.svg"); }
 .icon-arrow-left  { --icon: url("../img/icons/arrow-left.svg"); }
-.icon-check       { --icon: url("../img/icons/check.svg"); }
 .icon-play        { --icon: url("../img/icons/play.svg"); }
 
 /* ---------- Etiqueta pequena (categorias, "Destaque") ---------- */

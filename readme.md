@@ -5,12 +5,16 @@ Site de portfólio do Dyo, editor de vídeos e YouTuber: portfólio com vídeos 
 ## Tecnologias
 
 - HTML, CSS e JavaScript puros — sem framework e sem etapa de build
-- Netlify (hospedagem) e Netlify Image CDN (otimização das imagens no site publicado)
+- GitHub Pages (hospedagem)
 - Google Fonts: Montserrat Bold/Black (títulos e chamadas), Literata (ênfases editoriais e depoimentos) e DM Sans (textos)
 
 ## Rodando localmente
 
-Abra o `index.html` no navegador ou use a extensão Live Server do VS Code. Pra ter o otimizador de imagens igual ao site publicado, rode `netlify dev --port 8889`.
+Abra o `index.html` no navegador ou use a extensão Live Server do VS Code. As imagens locais funcionam do mesmo jeito no computador e no GitHub Pages.
+
+## Publicação
+
+O site é publicado pelo GitHub Pages em https://digas221960-wq.github.io/dyooo/. Faça as alterações na branch `main`; o GitHub publica a atualização automaticamente.
 
 ## Onde fica cada coisa
 
