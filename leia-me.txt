@@ -1,413 +1,253 @@
 ========================================================
-  GUIA DO SITE — DYO
-  Feito por Dyo
+  GUIA PASSO A PASSO — SITE DYO
 ========================================================
 
-Oi, Dyo! Esse arquivo explica onde fica cada coisa do
-site, pra você conseguir mexer sem quebrar nada.
+Este guia explica como atualizar o portfólio sem mexer na
+programação do site. Leia a parte da alteração que deseja
+fazer e siga os passos com calma.
 
-Se tiver dúvida, me chama no Discord. Não tenta adivinhar.
 
-
---------------------------------------------------------
-  1) O QUE TEM DENTRO DA PASTA
+1. ONDE FICA CADA COISA
 --------------------------------------------------------
 
-projeto/
-│
-├── index.html              → A página do site (títulos e textos fixos)
-├── 404.html                → Página de "link não encontrado"
-├── LEIA-ME.txt             → Esse arquivo aqui
-│
-├── css/                    → APARÊNCIA
-│   ├── variables.css       → ★ CORES, fontes e tamanhos (mexa aqui!)
-│   ├── base.css            → Botões, ícones, destaques de texto
-│   ├── layout.css          → Topo (menu) e rodapé
-│   ├── identity.css        → Cores e acabamento compartilhado
-│   └── sections/           → Um arquivo pra cada seção:
-│       ├── hero.css            Início
-│       ├── about.css           Quem sou eu
-│       ├── portfolio.css       Portfólio
-│       ├── testimonials.css    Depoimentos
-│       └── contact.css         Contato
-│
-├── js/
-│   ├── content.js          → ★ CONTEÚDO (vídeos, depoimentos, contatos)
-│   └── app.js              → Lógica do site (não precisa mexer)
-│
-└── img/                    → IMAGENS
-    ├── brand/dyo-studio-logo.svg Logo DYO (início e rodapé)
-    ├── brand/dyo-studio-icon.svg Ícone DYO (aba do navegador)
-    ├── brand/foto-dyo.webp   Sua foto pessoal (guardada)
-    ├── backgrounds/contact.webp Fundo da seção Contato
-    ├── sections/about.webp     Foto da seção "Quem sou eu"
-    ├── testimonials/           Fotos dos clientes
-    ├── social/og-image.jpg     Imagem que aparece ao compartilhar o link
-    ├── social/og-image.svg     Arte original da imagem de compartilhamento
-    └── icons/                  Ícones (contatos e programas na abertura)
+js/content.js
+  Vídeos do portfólio, depoimentos, contatos e informações
+  profissionais. É o arquivo que você vai editar com mais
+  frequência.
 
-Não renomeie as pastas nem os arquivos. O site depende
-desses nomes exatos pra funcionar.
+index.html
+  Títulos, parágrafos e textos fixos das seções.
+
+img/
+  Fotos, logos, imagens de fundo e ícones.
+
+css/variables.css
+  Cores, fontes e tamanhos gerais.
+
+css/sections/
+  Aparência de cada seção. Evite editar estes arquivos se
+  você só quer trocar um vídeo ou texto.
+
+js/app.js
+  Funcionamento do site. Não edite para atualizar o conteúdo.
+
+docs/backups/
+  Cópias antigas guardadas por segurança. Elas não aparecem
+  no site nem são enviadas ao GitHub.
+
+IMPORTANTE: index.html, 404.html, css/, img/ e js/ precisam
+ficar na raiz do projeto. Não coloque essas pastas dentro de
+outra pasta: o site publicado deixaria de encontrar os arquivos.
 
 
---------------------------------------------------------
-  2) "QUERO MUDAR X" — ONDE EU MEXO?
+2. COMO EDITAR E PUBLICAR PELO GITHUB
 --------------------------------------------------------
 
-  Uma cor ................. css/variables.css
-  Um vídeo do portfólio .... js/content.js  (projects)
-  Um depoimento ............ js/content.js  (testimonials)
-  Um link de contato ....... js/content.js  (contactLinks)
-  Título ou texto fixo ..... index.html
-  Uma imagem ............... img/  (veja o item 5)
-  Visual de uma seção ...... css/sections/<nome da seção>.css
-  Identidade visual ......... css/identity.css
+1. Abra https://github.com/digas221960-wq/dyooo e entre na
+   sua conta do GitHub.
+2. Abra o arquivo que quer mudar. Por exemplo:
+   js/content.js para vídeos, depoimentos e contatos.
+3. Clique no ícone de lápis (Edit this file).
+4. Faça a alteração com cuidado. Não apague chaves { },
+   colchetes [ ], aspas ou vírgulas que fazem parte do código.
+5. Confira a alteração e clique em Commit changes.
+6. Confirme em Commit changes novamente. O GitHub publica a
+   atualização automaticamente pelo GitHub Pages.
+7. Aguarde alguns minutos e confira:
+   https://digas221960-wq.github.io/dyooo/
+   Se ainda aparecer a versão antiga, atualize com Ctrl+F5.
 
-Os ícones Adobe Premiere Pro e Adobe After Effects aparecem
-em cards abaixo dos botões da abertura. O título da área é
-"Programas que domino". Os arquivos SVG ficam em img/icons/.
+Antes de mexer, você pode abrir o site em outra aba para
+comparar. No GitHub, cada alteração confirmada fica salva no
+histórico e pode ser recuperada.
 
-Pacotes mensais e serviços avulsos foram removidos do site
-e dos dados editáveis. Para oferecer um serviço, use os
-links de contato e converse diretamente com o cliente.
-
-
---------------------------------------------------------
-  3) COMO ABRIR O SITE PRA TESTAR
---------------------------------------------------------
-
-Modo 1 — Simples:
-  Dê dois cliques no "index.html". Ele abre no navegador.
-
-Modo 2 — Melhor (recomendado):
-  1. Abra o VS Code
-  2. Instale a extensão "Live Server"
-  3. Clique com o botão direito no "index.html"
-  4. Escolha "Open with Live Server"
-
-Obs: as imagens são carregadas diretamente dos arquivos
-do projeto, tanto no computador quanto no site publicado.
+Para mudar um arquivo, use o lápis na página dele. Para enviar
+uma imagem nova, abra primeiro a pasta certa (por exemplo,
+img/testimonials/), escolha Add file > Upload files, selecione
+a imagem e confirme com Commit changes.
 
 
---------------------------------------------------------
-  4) COMO EDITAR OS TEXTOS
+3. COMO ADICIONAR, TROCAR OU REMOVER UM VÍDEO
 --------------------------------------------------------
 
-REGRA BÁSICA:
-  - Só mexa no texto que está ENTRE aspas ou entre tags
-  - Não apague chaves { }, colchetes [ ], vírgulas ou aspas
-  - Não apague nada que começa com < ou termina com >
+Abra js/content.js e procure:
 
-DESTACAR UMA PALAVRA (no index.html):
+  projects: [
 
-  <span class="accent">palavra</span>
-     → fica AMARELA nas seções escuras
+Cada bloco entre chaves { ... } é um projeto. Para adicionar
+um, copie um bloco inteiro, cole dentro da lista e troque os
+dados. Exemplo:
 
-  <span class="marker">palavra</span>
-     → fica com "marca-texto" amarelo atrás
+    {
+      title: "Nome do meu vídeo",
+      youtubeId: "ID_DO_VIDEO",
+      category: "Vídeo",
+      type: "video",
+      format: "horizontal",
+    },
 
-  Exemplo:
-    <h2 class="section-title">Planos <span class="accent">mensais</span></h2>
+Troque "ID_DO_VIDEO" pelo código do vídeo no YouTube. O ID
+fica no endereço:
 
-  Use pouco: uma palavra por título já chama atenção.
+  youtube.com/watch?v=ABC123xyz09  → ID: ABC123xyz09
+  youtube.com/shorts/ABC123xyz09   → ID: ABC123xyz09
+  youtu.be/ABC123xyz09             → ID: ABC123xyz09
 
+O ID tem 11 letras, números, traços ou sublinhados. Não copie
+o endereço inteiro: use somente o ID.
 
---------------------------------------------------------
-  5) COMO TROCAR AS IMAGENS
---------------------------------------------------------
+Escolha o tipo e o formato:
 
-O jeito mais fácil: substitua o arquivo MANTENDO O MESMO
-NOME e a mesma pasta. Não precisa mexer no código.
+  Vídeo longo horizontal:
+    type: "video"
+    format: "horizontal"
 
-  Sua foto       → img/brand/foto-dyo.webp
-                   (o rosto fica centralizado; 512x512 ou maior)
-  Fundo do contato → img/backgrounds/contact.webp
-                   (horizontal, uns 1600x900)
-  Quem sou eu    → img/sections/about.webp
-                   (em pé, proporção 4:5, uns 900x1125)
+  Short, Reels ou vídeo vertical:
+    type: "short"
+    format: "vertical"
 
-Se a imagem nova for .jpg ou .png em vez de .webp, você
-precisa trocar o final do nome também no index.html
-(use Ctrl+F e procure pelo nome antigo).
+  Animação:
+    type: "motion"
+    format: "horizontal"
 
-Foto de cliente nos depoimentos: coloque o arquivo em
-img/testimonials/ e escreva o caminho no campo "avatar"
-do depoimento, no js/content.js.
+O texto de category é o rótulo que aparece no cartão, por
+exemplo "Short", "YouTube" ou "Motion Design". O type controla
+em qual filtro o projeto aparece; mantenha os valores exatamente
+como estão acima.
 
+Para deixar um projeto antes dos outros, acrescente, por
+exemplo, priority: 2, antes do fechamento }. Um número maior
+aparece primeiro. Se não usar priority, os projetos mantêm a
+ordem normal.
 
---------------------------------------------------------
-  6) COMO MEXER NO PORTFÓLIO (VÍDEOS DO YOUTUBE)
---------------------------------------------------------
+Para trocar um vídeo, mude title, youtubeId e, se necessário,
+category, type e format no bloco dele.
 
-Os vídeos ficam no "js/content.js", dentro de:  projects: [
-
-Cada vídeo é um bloco assim:
-
-  {
-    title: "Nome do vídeo",
-    description: "Frase curta sobre o vídeo.",
-    youtubeId: "fK036KNKLbQ",
-    category: "Vídeo longo",
-    type: "video",
-    format: "horizontal",
-  },
-
-  title        → nome que aparece embaixo do vídeo
-  youtubeId    → o ID do vídeo no YouTube
-  category     → etiqueta tipo "Short", "Vídeo longo"
-  type         → em qual botão de filtro aparece:
-                   "video", "short" ou "motion"
-  format       → "horizontal" (normal) ou "vertical" (Short)
-  priority     → número maior aparece primeiro no carrossel
-                 (se não usar, os vídeos seguem a ordem da lista)
-
-Os projetos aparecem um por vez no carrossel. Use as setas,
-as teclas de seta ou deslize no celular para navegar. Ao apertar
-o botão de reprodução, o vídeo abre em uma janela maior. Feche
-no botão "X" ou clicando fora da janela. O vídeo só carrega nesse momento.
-
-COMO PEGAR O youtubeId:
-  https://www.youtube.com/watch?v=fK036KNKLbQ  →  fK036KNKLbQ
-  https://youtube.com/shorts/nA2FhmL1bcU       →  nA2FhmL1bcU
-
-Pra adicionar: copie um bloco { ... } inteiro, cole
-embaixo do último (antes do ]) e ajuste.
-Pra remover: apague o bloco { ... } inteiro.
+Para remover um vídeo, apague o bloco inteiro dele, incluindo
+o separador vírgula. Não apague o colchete que fecha a lista
+projects: [ ... ].
 
 
---------------------------------------------------------
-  7) COMO EDITAR OS DEPOIMENTOS
+4. COMO ADICIONAR OU EDITAR UM DEPOIMENTO
 --------------------------------------------------------
 
-Os depoimentos ficam no "js/content.js", dentro de
-testimonials: [.
+Em js/content.js, procure:
 
-Depoimentos:
-  name, handle (@), quote (o texto), avatar (foto)
-  Se deixar avatar vazio (""), aparece um círculo amarelo
-  com as iniciais do nome.
+  testimonials: [
 
-Para adicionar ou remover um depoimento, copie ou apague
-um bloco { ... } dentro da lista. Mantenha as vírgulas.
+Cada depoimento usa estes campos:
+
+    {
+      name: "Nome do cliente",
+      handle: "@usuario",
+      quote: "Texto autorizado pelo cliente.",
+      avatar: "img/testimonials/nome-da-foto.webp",
+    },
+
+Troque o nome, o usuário e a frase. O handle é opcional; se
+não quiser mostrar um, use handle: "".
+
+Para usar uma foto, envie o arquivo para img/testimonials/ e
+escreva o caminho e o nome exatos em avatar. Se não tiver foto,
+use avatar: "". O site mostrará as iniciais do nome.
+
+Peça autorização antes de publicar o nome, a foto ou a frase de
+um cliente. As fotos de clientes que já estão no site são reais;
+não as substitua por imagens inventadas.
+
+Para remover um depoimento, apague somente o bloco dele.
 
 
+5. COMO TROCAR OS LINKS DE CONTATO
 --------------------------------------------------------
-  8) COMO TROCAR OS LINKS DE CONTATO
---------------------------------------------------------
 
-No "js/content.js", dentro de  contactLinks: {
+Em js/content.js, procure:
+
+  contactLinks: {
+
+Edite o endereço que está entre aspas, sem apagar o nome do
+campo. Exemplos:
 
   whatsapp: "https://wa.me/5521984315865",
-  instagram: "https://www.instagram.com/itsd.yoooo",
-  x: "https://x.com/itsdyooooo",
-  tiktok: "https://www.tiktok.com/@itsdyo",
+  instagram: "https://www.instagram.com/seuusuario",
+  x: "https://x.com/seuusuario",
+  tiktok: "https://www.tiktok.com/@seuusuario",
   primary: "https://wa.me/5521984315865",
 
-O WhatsApp precisa ter o "55" na frente do número.
-O "primary" é o botão amarelo "Entrar em contato".
-
-O Discord não tem link: só o nome de usuário (itsdyo)
-aparece no index.html, na seção CONTATO.
-
-O texto que aparece (ex: "(21) 98431-5865") fica no
-index.html, na seção CONTATO.
+No WhatsApp, use o código do Brasil 55 e o número com DDD,
+somente números: sem +, espaços ou parênteses. O campo primary
+é o destino do botão principal "Entrar em contato".
 
 
---------------------------------------------------------
-  9) COMO MEXER NAS CORES
+6. COMO MUDAR TEXTOS E INFORMAÇÕES DO PERFIL
 --------------------------------------------------------
 
-As cores ficam em "css/variables.css", no começo do arquivo:
+Para alterar um título ou parágrafo que aparece na página,
+edite o texto dentro de index.html, sem apagar as tags como
+<p>, <h2> e </p>.
 
-  --color-yellow       → amarelo (ações e destaques)
-  --color-red          → vermelho sutil nos detalhes do portfólio
-  --color-red-strong   → vermelho mais escuro do portfólio
-  --color-ink          → preto principal
-  --color-paper        → preto alternativo
+Para adicionar informações profissionais opcionais, edite
+profileDetails em js/content.js. Cada informação tem um rótulo
+e um texto:
 
-Mudou ali, muda no site inteiro.
-Gerador de cores: https://coolors.co
+  profileDetails: [
+    { label: "Experiência", text: "Sua informação verdadeira" },
+  ],
 
-O acabamento das seções fica em "css/identity.css".
-As classes "theme-dark" e "theme-light" organizam os tons
-de preto usados no index.html.
+Se não quiser mostrar essas informações, deixe:
 
-O logo DYO fica em "img/brand/dyo-studio-logo.svg" e aparece
-no destaque inicial e no rodapé. No cabeçalho, a marca é o
-texto "DYO", centralizado sem imagem. O ícone da aba usa
-"img/brand/dyo-studio-icon.svg". A foto pessoal em
-"img/brand/foto-dyo.webp" continua guardada,
-mas não aparece na apresentação inicial. As miniaturas dos
-vídeos e as fotos reais dos clientes não mudam.
+  profileDetails: [],
+
+Não publique dados pessoais que você não queira deixar
+públicos na internet.
 
 
---------------------------------------------------------
-  10) COMO PUBLICAR
+7. COMO TROCAR UMA FOTO
 --------------------------------------------------------
 
-O site é publicado pelo GitHub Pages. Para enviar uma
-alteração pelo site do GitHub:
-  1. Acesse https://github.com/digas221960-wq/dyooo
-  2. Abra ou envie somente os arquivos que foram alterados
-  3. Confirme em "Commit changes"
-  4. Aguarde o GitHub Pages atualizar o site
+Para trocar uma foto mantendo o mesmo uso no site, envie a nova
+imagem para a mesma pasta e mantenha exatamente o mesmo nome do
+arquivo antigo. Assim o site continua encontrando a imagem sem
+alterar o código.
 
-Se mudar o endereço do site (domínio), troque também o
-link da imagem de compartilhamento no index.html
-(procure por "og-image").
+Fotos e logos da marca: img/brand/
+Fotos de depoimentos: img/testimonials/
+Imagem guardada da seção "Sobre": img/sections/
+Fundo do contato: img/backgrounds/
+Imagem de compartilhamento: img/social/
 
+ATENÇÃO: a seção "Sobre" atualmente mostra "Em breve". Trocar
+img/sections/about.webp, sozinha, não muda o que aparece nessa
+seção. Não apague a imagem: ela está guardada para uso futuro.
 
---------------------------------------------------------
-  11) SE DER ALGUM PROBLEMA
---------------------------------------------------------
-
-Vídeos com tela preta:
-  - Confere se o youtubeId tá certo
-  - Testa em aba anônima (bloqueador de anúncio atrapalha)
-  - Confere se o vídeo tá "público" no YouTube
-
-Portfólio, pacotes e depoimentos sumiram:
-  - Provavelmente faltou uma vírgula, aspas ou chave no
-    js/content.js. Desfaça com Ctrl+Z.
-
-Site ficou sem estilo (tudo branco):
-  - A pasta "css" sumiu ou algum arquivo foi renomeado
-
-Imagem não aparece:
-  - Confere o nome do arquivo (tudo minúsculo) e a pasta
-
-Apareceu Ã§, Ã£ no lugar de ç, ã:
-  - Salve o arquivo em UTF-8
+Não apague foto, logo ou ícone sem saber onde ele é usado.
+Mantenha uma cópia da imagem antiga antes de substituí-la.
 
 
---------------------------------------------------------
-  12) REGRAS DE OURO
+8. COMO MUDAR AS CORES
 --------------------------------------------------------
 
-  1. Faça uma cópia da pasta antes de mexer.
-  2. Edite UMA coisa por vez. Salvou, testou, funcionou?
-     Aí vai pra próxima.
-  3. NUNCA apague chaves { }, colchetes [ ] nem vírgulas.
-  4. Depois de editar, F5 no navegador (ou Ctrl+F5).
-  5. Em caso de dúvida, me chama.
-
-Discord: mrjgodzilla.dev
-========================================================
+As cores e tamanhos principais ficam em css/variables.css.
+Se for alterar, mude apenas o valor do token desejado e teste
+as seções claras e escuras. Não coloque cores diretamente nos
+arquivos css/sections/: o site usa variáveis compartilhadas.
 
 
---------------------------------------------------------
-  TIPOGRAFIA E COMPOSIÇÃO
+9. REGRAS PARA NÃO QUEBRAR O SITE
 --------------------------------------------------------
 
-O site usa Montserrat nos títulos, DM Sans na leitura e
-Literata em textos editoriais e depoimentos. As fontes
-são carregadas no index.html e no 404.html; os nomes
-ficam em css/variables.css.
+- Edite só o que precisa; não apague linhas que não entende.
+- Em js/content.js, mantenha aspas, chaves, colchetes e vírgulas.
+- Use o ID do YouTube, não o link completo, em youtubeId.
+- Confira se o nome e o caminho de cada imagem estão corretos.
+- Não mova index.html, 404.html, css/, img/ ou js/.
+- Não edite js/app.js para trocar conteúdo.
+- Salve e publique pelo botão Commit changes do GitHub.
+- Depois da publicação, abra o site e confira a alteração.
 
-A identidade visual usa preto com amarelo dourado nos
-destaques. O logo vetorial do início e rodapé fica em
-img/brand/dyo-studio-logo.svg; no cabeçalho, "DYO" fica à
-esquerda no computador e centralizado no celular. Na abertura,
-os ícones Premiere e After Effects aparecem em cards abaixo dos
-botões da abertura, na área "Programas que domino".
-O ícone da aba está em
-img/brand/dyo-studio-icon.svg. A foto pessoal, as imagens
-dos projetos e as fotos dos clientes continuam separadas.
+Se algo ficar errado, não faça várias mudanças de uma vez.
+Volte ao arquivo no GitHub, compare com o histórico da última
+alteração e corrija só o trecho com problema.
 
-Os cabeçalhos alternam alinhamento no computador. No
-celular, as grades são reorganizadas automaticamente.
-O visual de cada seção continua no mesmo arquivo CSS.
-Os ícones dos programas na abertura ficam em
-img/icons/adobe-premiere-pro.svg e
-img/icons/adobe-after-effects.svg.
-O espaço "Em breve" foi mantido, sem adicionar imagem.
-
-
---------------------------------------------------------
-  POSICIONAMENTO — CAMPOS PARA SUA PRÓXIMA REVISÃO
---------------------------------------------------------
-
-Nenhum texto publicado foi reescrito nesta etapa. Os
-campos novos estão vazios e não aparecem até você
-preenchê-los. Não é preciso editar o js/app.js.
-
-1) APRESENTAÇÃO
-
-No js/content.js, profileDetails recebe informações
-profissionais. Escreva apenas o que consegue comprovar:
-experiência prática, processo, ferramentas e tipos de
-projeto. Cada item usa este formato:
-
-  { label: "", text: "" },
-
-Preencha as duas aspas vazias com seu rótulo e sua
-explicação. Cole o item dentro de profileDetails: [ ].
-Se um dos campos estiver vazio, o item não aparece.
-
-A experiência ganhou prioridade visual. Idade e canais
-continuam visíveis. No index.html, os parágrafos de
-#sobre ainda mencionam aprendizado, idade e canal próprio;
-revise esses textos pessoalmente na próxima etapa, sem
-omitir informações ou sugerir experiência que não tem.
-
-2) PROJETOS REAIS
-
-Cada projeto em projects mantém vídeo, categoria,
-descrição e destaque atuais e recebe campos opcionais:
-
-  authorship: "",     → identificação honesta da autoria
-  details: [],        → pares { label: "", text: "" }
-  techniques: [],     → lista de técnicas escritas por você
-  demonstrations: [],→ trechos reais que demonstram técnica
-  comparison: null,   → comparação autorizada (veja abaixo)
-  priority: 0,        → número maior aparece antes na mesma grade
-
-Em details, você pode escrever sua participação, o tipo
-de conteúdo e o processo. Em techniques, escreva somente
-recursos demonstráveis no projeto. Autoria não é deduzida
-pelo site: preencha authorship para identificar trabalho
-autoral ou sua participação com precisão.
-
-Não troque categorias ou prioridade com base em métricas
-inventadas. Assista aos trabalhos e escolha a ordem que
-apresenta melhor seus projetos.
-
-3) DEMONSTRAÇÕES TÉCNICAS
-
-Dentro de demonstrations: [ ], cada trecho usa:
-
-  { caption: "", youtubeId: "", format: "horizontal" },
-
-Escreva a legenda e o ID real do vídeo. Se for vertical,
-use format: "vertical". Sem legenda ou ID válido, o trecho
-não aparece. Nada é reproduzido automaticamente.
-
-Use esse componente para explicar uma decisão real de
-edição. Não há uma lista automática de especialidades.
-
-4) ANTES E DEPOIS
-
-Substitua comparison: null por este objeto somente
-quando você tiver os dois vídeos e puder publicá-los:
-
-  comparison: {
-    authorized: false,
-    before: { caption: "", youtubeId: "", format: "horizontal" },
-    after: { caption: "", youtubeId: "", format: "horizontal" },
-  },
-
-Preencha as legendas para distinguir original e resultado.
-Use os IDs reais do YouTube (11 caracteres). Só mude
-false para true depois de obter autorização para exibir
-os materiais. O par só aparece com autorização true,
-dois IDs válidos e as duas legendas preenchidas.
-Essa opção controla a exibição; não registra nem substitui
-a autorização do titular. Não publique material privado.
-No celular, os vídeos são empilhados com suas legendas.
-
-5) REVISÃO TEXTUAL A FAZER POR VOCÊ
-
-Além de #sobre, confira a frase de abertura e os dados
-rápidos em #top, as descrições em projects e as descrições
-dos depoimentos em testimonials no js/content.js. Revise
-os textos para manter as informações atualizadas.
+Site publicado:
+https://digas221960-wq.github.io/dyooo/

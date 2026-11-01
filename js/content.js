@@ -4,12 +4,13 @@
    Ano: 2026
 
    Esse é o arquivo que você mais vai mexer.
-   Aqui ficam: vídeos do portfólio, pacotes, avulsos,
+   Aqui ficam: informações do perfil, vídeos do portfólio,
    depoimentos e links de contato.
 
    A lógica do site fica em js/app.js — não precisa mexer lá.
 
-   REGRA BÁSICA: só troque o texto ENTRE aspas.
+   Para mudanças simples, troque o texto ENTRE aspas.
+   Para adicionar um vídeo, siga o passo a passo do leia-me.txt.
    Não apague chaves { }, colchetes [ ] nem vírgulas.
    ========================================================= */
 
@@ -48,86 +49,6 @@ window.SITE_CONTENT = {
       category: "video curto",
       type: "short",
       format: "vertical",
-    },
-  ],
-
-  /* =========================================================
-     PACOTES MENSAIS
-     ---------------------------------------------------------
-     featured  → true destaca o pacote com um tom dourado sutil
-     ========================================================= */
-  packages: [
-    {
-      scopeDetails: [], // Pares { label: "", text: "" } para explicar o escopo.
-      name: "Básico",
-      description: "Pra quem tá começando e quer manter constância.",
-      features: [
-        "4 vídeos por mês",
-        "Edição básica",
-        "Até 1 hora de material bruto por vídeo",
-        "Entrega até 4 dias",
-        "2 revisões por vídeo",
-      ],
-      featured: false,
-      cta: "Solicitar orçamento",
-    },
-    {
-      scopeDetails: [],
-      name: "Profissional",
-      description: "Mais volume, mais acabamento e o melhor custo-benefício.",
-      features: [
-        "10 vídeos por mês",
-        "Edição avançada",
-        "Até 1 hora de material bruto por vídeo",
-        "Entrega até 3 dias",
-        "4 revisões",
-      ],
-      featured: true,
-      cta: "Solicitar orçamento",
-    },
-    {
-      scopeDetails: [],
-      name: "Shorts",
-      description: "Foco total em conteúdo vertical e viral.",
-      features: [
-        "15 shorts por mês",
-        "Cortes dinâmicos + legendas",
-        "Efeitos e sons virais",
-        "Entrega semanal",
-        "Formato TikTok / Shorts / Reels",
-        "Correção de cor",
-      ],
-      featured: false,
-      cta: "Solicitar orçamento",
-    },
-  ],
-
-  /* =========================================================
-     SERVIÇOS AVULSOS
-     ========================================================= */
-  services: [
-    {
-      scopeDetails: [],
-      name: "Vídeo",
-      description: "Ideal pra um vídeo pontual, sem pacote mensal.",
-      features: [
-        "Até 1 hora de material bruto",
-        "Cortes",
-        "Ajuste de áudio",
-        "Música",
-        "Zooms simples",
-      ],
-    },
-    {
-      scopeDetails: [],
-      name: "Short",
-      description: "Corte vertical pronto pra TikTok, Shorts e Reels.",
-      features: [
-        "Cortes dinâmicos + legendas",
-        "Efeitos e SFX",
-        "Correção de cor",
-        "Formato TikTok / Shorts / Reels",
-      ],
     },
   ],
 
