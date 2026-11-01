@@ -111,6 +111,25 @@
   /* ---------- Animações de entrada (reveal) ---------- */
   function initRevealAnimations() {
     const elements = qsa(".reveal");
+    const staggeredGroups = [
+      ".testimonials-track > .testimonial-card",
+      ".site-footer .footer-brand",
+      ".site-footer .footer-nav > a",
+      ".site-footer .footer-copy > span",
+    ];
+
+    staggeredGroups.forEach((selector) => {
+      qsa(selector).forEach((element, index) => {
+        if (element.closest(".reveal")) return;
+        element.classList.add("reveal");
+        element.style.setProperty(
+          "--reveal-delay",
+          `${Math.min(index, 4) * 90}ms`
+        );
+        elements.push(element);
+      });
+    });
+
     if (!elements.length) return;
 
     // Navegadores antigos: mostra tudo
