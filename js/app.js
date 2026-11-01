@@ -111,6 +111,7 @@
   /* ---------- Animações de entrada (reveal) ---------- */
   function initRevealAnimations() {
     const elements = qsa(".reveal");
+    const staggeredElements = [];
     const staggeredGroups = [
       ".hero-tools-list > .hero-tool",
       ".about-meta > .meta-item",
@@ -124,7 +125,7 @@
 
     staggeredGroups.forEach((selector) => {
       qsa(selector).forEach((element, index) => {
-        element.classList.add("reveal");
+        element.classList.add("reveal", "reveal-pending");
         element.style.setProperty(
           "--reveal-delay",
           `${Math.min(index, 4) * 90}ms`
@@ -135,12 +136,16 @@
           }
         }, { once: true });
         elements.push(element);
+        staggeredElements.push(element);
       });
     });
 
     if (!elements.length) return;
-    // Registra o estado oculto antes de o observador revelar os elementos.
+    // Evita animar os elementos para fora ao preparar a entrada em cascata.
     void document.body.offsetHeight;
+    staggeredElements.forEach((element) => {
+      element.classList.remove("reveal-pending");
+    });
 
     // Navegadores antigos: mostra tudo
     if (!("IntersectionObserver" in window)) {

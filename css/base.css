@@ -245,6 +245,7 @@ h1, h2, h3, h4 {
   filter: blur(0);
   transform: none;
 }
+.reveal-pending { transition: none !important; }
 .site-footer .reveal { transition-delay: var(--reveal-delay, 0ms); }
 
 /* Sem JavaScript, mostra tudo */
