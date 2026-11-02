@@ -259,21 +259,42 @@
     media.replaceChildren(thumbnail);
 
     const isShort = getProjectType(project) === "short";
-    const playButton = createEl(isShort ? "a" : "button", "video-play-button");
+    const playButton = createEl("button", "video-play-button");
     playButton.setAttribute(
       "aria-label",
-      isShort ? `Assistir ${project.title} no YouTube (abre em nova aba)` : `Reproduzir ${project.title}`,
+      isShort ? `Assistir ${project.title} nesta página` : `Reproduzir ${project.title}`,
     );
     playButton.innerHTML = '<svg aria-hidden="true" viewBox="0 0 24 24"><path d="m9 6 10 6-10 6z" /></svg>';
     if (isShort) {
-      playButton.href = `https://www.youtube.com/shorts/${encodeURIComponent(project.youtubeId)}`;
-      playButton.target = "_blank";
-      playButton.rel = "noopener noreferrer";
+      playButton.type = "button";
+      playButton.addEventListener("click", () => createInlineShortPlayer(project, media));
     } else {
       playButton.type = "button";
       playButton.addEventListener("click", () => createProjectPlayer(project));
     }
     media.appendChild(playButton);
+  }
+
+  function createInlineShortPlayer(project, media) {
+    if (media.classList.contains("is-playing")) return;
+
+    const wrapper = createEl("div", "video-embed short-video-embed");
+    const iframe = document.createElement("iframe");
+    iframe.src = `https://www.youtube.com/embed/${encodeURIComponent(project.youtubeId)}?autoplay=1&playsinline=1&rel=0`;
+    iframe.title = project.title;
+    iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+    iframe.referrerPolicy = "strict-origin-when-cross-origin";
+    iframe.allowFullscreen = true;
+    wrapper.appendChild(iframe);
+    media.classList.add("is-playing");
+    media.appendChild(wrapper);
+  }
+
+  function stopInlineShortPlayer(card) {
+    const media = qs(".project-media.is-playing", card);
+    if (!media) return;
+    media.querySelector(".short-video-embed")?.remove();
+    media.classList.remove("is-playing");
   }
 
   function createProjectPlayer(project) {
@@ -410,6 +431,7 @@
       const nextIndex = (activeIndex + 1) % visibleCards.length;
       visibleCards.forEach((card, index) => {
         const active = index === activeIndex;
+        if (!active) stopInlineShortPlayer(card);
         card.classList.toggle("is-active", active);
         card.classList.toggle("is-prev", visibleCards.length > 2 && index === previousIndex);
         card.classList.toggle("is-next", index === nextIndex && !active);

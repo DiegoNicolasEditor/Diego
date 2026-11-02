@@ -116,9 +116,8 @@ Shorts mostram somente o vídeo, sem título ou selo no cartão.
 O type controla em qual filtro o projeto aparece; mantenha os
 valores exatamente como estão acima.
 
-Ao clicar no botão de reprodução de um Short, ele abre no
-YouTube em uma nova aba. Isso permite assistir mesmo quando o
-navegador não consegue reproduzir vídeos incorporados.
+Ao clicar no botão de reprodução de um Short, o vídeo é
+reproduzido dentro do próprio cartão, sem sair do site.
 Troque de Short pelas setas, pelos pontos abaixo do carrossel ou
 deslizando o dedo sobre ele no celular.
 
