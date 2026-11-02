@@ -478,12 +478,12 @@
 }
 
 .portfolio-featured .project-card.is-prev {
-  left: 25%;
+  left: 20%;
 }
 
 .portfolio-featured .project-card.is-next {
   left: auto;
-  right: 25%;
+  right: 20%;
 }
 
 .portfolio-featured .project-card.format-vertical {
