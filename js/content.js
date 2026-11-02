@@ -36,6 +36,13 @@ window.SITE_CONTENT = {
        Link: youtube.com/shorts/nA2FhmL1bcU   →  ID: nA2FhmL1bcU
      ========================================================= */
   projects: [
+    {
+      title: "ok",
+      youtubeId: "kkN-d-8E-0E",
+      category: "video curto",
+      type: "short",
+      format: "vertical",
+    },
       {
       title: "Vai comprar um monitor gamer?",
       youtubeId: "g8xepPKiihs",
