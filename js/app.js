@@ -280,7 +280,7 @@
 
     const wrapper = createEl("div", "video-embed short-video-embed");
     const iframe = document.createElement("iframe");
-    iframe.src = `https://www.youtube.com/embed/${encodeURIComponent(project.youtubeId)}?autoplay=1&playsinline=1&rel=0`;
+    iframe.src = `https://www.youtube.com/embed/${encodeURIComponent(project.youtubeId)}?autoplay=1&playsinline=1&controls=1&rel=0`;
     iframe.title = project.title;
     iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
     iframe.referrerPolicy = "strict-origin-when-cross-origin";
@@ -329,7 +329,7 @@
   }
 
   function createProjectCard(project) {
-    const article = createEl("article", "project-card reveal");
+    const article = createEl("article", "project-card");
     article.dataset.title = project.title;
     if (project.format) article.classList.add(`format-${project.format}`);
 
@@ -429,14 +429,31 @@
       activeIndex = (activeIndex + visibleCards.length) % visibleCards.length;
       const previousIndex = (activeIndex - 1 + visibleCards.length) % visibleCards.length;
       const nextIndex = (activeIndex + 1) % visibleCards.length;
+      const isShortCarousel = featuredContainer.classList.contains("is-short-carousel");
       visibleCards.forEach((card, index) => {
         const active = index === activeIndex;
+        const isShortNeighbor = isShortCarousel && !active && (index === previousIndex || index === nextIndex);
         if (!active) stopInlineShortPlayer(card);
         card.classList.toggle("is-active", active);
         card.classList.toggle("is-prev", visibleCards.length > 2 && index === previousIndex);
         card.classList.toggle("is-next", index === nextIndex && !active);
-        card.setAttribute("aria-hidden", active ? "false" : "true");
-        card.inert = !active;
+        if (isShortCarousel) {
+          card.setAttribute("role", isShortNeighbor ? "button" : "group");
+          card.setAttribute("aria-label", isShortNeighbor ? `Ir para o Short ${card.dataset.title}` : `Short ${card.dataset.title}`);
+          card.setAttribute("aria-hidden", active || isShortNeighbor ? "false" : "true");
+          card.tabIndex = isShortNeighbor ? 0 : -1;
+          card.inert = !active && !isShortNeighbor;
+          const playButton = qs(".video-play-button", card);
+          if (playButton) playButton.disabled = isShortNeighbor;
+        } else {
+          card.removeAttribute("role");
+          card.removeAttribute("aria-label");
+          card.removeAttribute("tabindex");
+          card.setAttribute("aria-hidden", active ? "false" : "true");
+          card.inert = !active;
+          const playButton = qs(".video-play-button", card);
+          if (playButton) playButton.disabled = false;
+        }
       });
 
       carouselDots.forEach((dot, index) => {
@@ -476,6 +493,27 @@
       updateCarousel();
     };
 
+    cards.forEach((card) => {
+      card.addEventListener("click", () => {
+        const targetIndex = visibleCards.indexOf(card);
+        if (!featuredContainer.classList.contains("is-short-carousel")
+          || targetIndex < 0
+          || targetIndex === activeIndex
+          || (!card.classList.contains("is-prev") && !card.classList.contains("is-next"))) return;
+        activeIndex = targetIndex;
+        updateCarousel();
+      });
+      card.addEventListener("keydown", (event) => {
+        if ((event.key !== "Enter" && event.key !== " ") || card.tabIndex < 0) return;
+        event.preventDefault();
+        const targetIndex = visibleCards.indexOf(card);
+        if (targetIndex < 0) return;
+        activeIndex = targetIndex;
+        updateCarousel();
+        qs(".video-play-button", card)?.focus();
+      });
+    });
+
     if (prevBtn) prevBtn.addEventListener("click", () => move(-1));
     if (nextBtn) nextBtn.addEventListener("click", () => move(1));
 
@@ -512,6 +550,13 @@
         card.hidden = !show;
         card.inert = !show;
         card.setAttribute("aria-hidden", show ? "false" : "true");
+        if (filter !== "short") {
+          card.removeAttribute("role");
+          card.removeAttribute("aria-label");
+          card.removeAttribute("tabindex");
+          const playButton = qs(".video-play-button", card);
+          if (playButton) playButton.disabled = false;
+        }
         if (!show) card.classList.remove("is-active", "is-prev", "is-next");
         if (show) {
           visibleCount++;
