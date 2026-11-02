@@ -28,6 +28,10 @@
   --color-paper-soft: #101010;      /* cartões no fundo alternativo */
   --color-paper-line: #242424;      /* bordas no fundo alternativo */
 
+  /* ---------- Botão do player de Shorts ---------- */
+  --color-short-player-shade: rgba(0, 0, 0, 0.42);
+  --color-short-player-button: rgba(244, 243, 239, 0.92);
+
   /* ---------- Textos ---------- */
   --color-text-light: #f4f3ef;      /* texto principal */
   --color-text-light-muted: #b2b1ad;

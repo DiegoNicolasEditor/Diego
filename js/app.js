@@ -258,20 +258,22 @@
     thumbnail.fetchPriority = "low";
     media.replaceChildren(thumbnail);
 
-    const playButton = createEl("button", "video-play-button");
-    playButton.type = "button";
-    playButton.setAttribute("aria-label", `Reproduzir ${project.title}`);
+    const isShort = getProjectType(project) === "short";
+    const playButton = createEl(isShort ? "a" : "button", "video-play-button");
+    playButton.setAttribute(
+      "aria-label",
+      isShort ? `Assistir ${project.title} no YouTube (abre em nova aba)` : `Reproduzir ${project.title}`,
+    );
     playButton.innerHTML = '<svg aria-hidden="true" viewBox="0 0 24 24"><path d="m9 6 10 6-10 6z" /></svg>';
-    playButton.addEventListener("click", () => createProjectPlayer(project));
+    if (isShort) {
+      playButton.href = `https://www.youtube.com/shorts/${encodeURIComponent(project.youtubeId)}`;
+      playButton.target = "_blank";
+      playButton.rel = "noopener noreferrer";
+    } else {
+      playButton.type = "button";
+      playButton.addEventListener("click", () => createProjectPlayer(project));
+    }
     media.appendChild(playButton);
-  }
-
-  function restoreProjectPreview(card) {
-    if (!card || !qs("iframe", card)) return;
-    renderProjectPreview({
-      youtubeId: card.dataset.youtubeId,
-      title: qs(".project-title", card).textContent,
-    }, qs(".project-media", card));
   }
 
   function createProjectPlayer(project) {
@@ -307,6 +309,7 @@
 
   function createProjectCard(project) {
     const article = createEl("article", "project-card reveal");
+    article.dataset.title = project.title;
     if (project.format) article.classList.add(`format-${project.format}`);
 
     const media = createEl("div", "project-media");
@@ -349,7 +352,7 @@
     }
 
     article.appendChild(media);
-    article.appendChild(body);
+    if (getProjectType(project) !== "short") article.appendChild(body);
     appendProjectEvidence(article, project);
     return article;
   }
@@ -384,14 +387,19 @@
     const emptyMsg = qs("#portfolio-empty");
     const prevBtn = qs('[data-portfolio-carousel="prev"]');
     const nextBtn = qs('[data-portfolio-carousel="next"]');
+    const dotsContainer = qs("#portfolio-carousel-dots");
+    const portfolioSection = qs("#portfolio");
     if (!buttons.length) return;
 
     let activeIndex = 0;
     let visibleCards = [];
+    let carouselDots = [];
 
     const updateCarousel = () => {
       if (!visibleCards.length) {
         featuredContainer.style.height = "";
+        if (dotsContainer) dotsContainer.replaceChildren();
+        carouselDots = [];
         if (prevBtn) prevBtn.hidden = true;
         if (nextBtn) nextBtn.hidden = true;
         return;
@@ -409,6 +417,12 @@
         card.inert = !active;
       });
 
+      carouselDots.forEach((dot, index) => {
+        const active = index === activeIndex;
+        dot.classList.toggle("is-active", active);
+        dot.setAttribute("aria-pressed", active ? "true" : "false");
+      });
+
       const activeCard = visibleCards[activeIndex];
       featuredContainer.style.height = `${activeCard.offsetHeight}px`;
       const hasNeighbors = visibleCards.length > 1;
@@ -416,9 +430,26 @@
       if (nextBtn) nextBtn.hidden = !hasNeighbors;
     };
 
+    const renderCarouselDots = () => {
+      if (!dotsContainer) return;
+      dotsContainer.replaceChildren();
+      carouselDots = visibleCards.map((card, index) => {
+        const dot = createEl("button", "portfolio-carousel-dot");
+        dot.type = "button";
+        dot.setAttribute("aria-label", `Ir para ${card.dataset.title}`);
+        dot.setAttribute("aria-pressed", "false");
+        dot.addEventListener("click", () => {
+          if (index === activeIndex) return;
+          activeIndex = index;
+          updateCarousel();
+        });
+        dotsContainer.appendChild(dot);
+        return dot;
+      });
+    };
+
     const move = (step) => {
       if (visibleCards.length < 2) return;
-      restoreProjectPreview(visibleCards[activeIndex]);
       activeIndex += step;
       updateCarousel();
     };
@@ -447,7 +478,6 @@
     });
 
     const applyFilter = (filter) => {
-      if (visibleCards.length) restoreProjectPreview(visibleCards[activeIndex]);
       buttons.forEach((btn) => {
         const active = btn.dataset.filter === filter;
         btn.classList.toggle("is-active", active);
@@ -469,6 +499,9 @@
 
       visibleCards = cards.filter((card) => card.dataset.type === filter);
       activeIndex = 0;
+      featuredContainer.classList.toggle("is-short-carousel", filter === "short");
+      if (portfolioSection) portfolioSection.classList.toggle("is-short-filter", filter === "short");
+      renderCarouselDots();
       updateCarousel();
       if (emptyMsg) emptyMsg.hidden = visibleCount > 0;
     };
