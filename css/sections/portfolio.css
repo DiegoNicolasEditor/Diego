@@ -583,7 +583,9 @@
   .portfolio-featured .project-card { width: 94%; }
   .portfolio-featured .project-card.format-vertical { width: min(68%, 300px); }
   .portfolio-featured .project-card.is-prev,
-  .portfolio-featured .project-card.is-next { visibility: hidden; }
+  .portfolio-featured .project-card.is-next { visibility: visible; }
+  .portfolio-featured .project-card.is-prev { left: -15%; }
+  .portfolio-featured .project-card.is-next { right: -15%; }
   .portfolio-carousel-btn { width: 36px; height: 36px; }
 }
 
