@@ -472,22 +472,22 @@
 .portfolio-featured .project-card.is-prev,
 .portfolio-featured .project-card.is-next {
   z-index: 1;
-  opacity: 0.65;
+  opacity: 0.5;
   width: min(70%, 760px);
-  transform: translateY(-50%) scale(0.86);
+  transform: translateY(-50%) scale(0.59);
 }
 
 .portfolio-featured .project-card.is-prev {
-  left: 8%;
+  left: 13%;
 }
 
 .portfolio-featured .project-card.is-next {
   left: auto;
-  right: 8%;
+  right: 13%;
 }
 
 .portfolio-featured .project-card.format-vertical {
-  width: min(32%, 300px);
+  width: min(40%, 300px);
 }
 
 .portfolio-featured .project-media {
@@ -497,7 +497,7 @@
 
 .portfolio-featured .project-card.format-vertical .project-media {
   aspect-ratio: 9 / 16;
-  max-height: min(58vh, 520px);
+  max-height: min(76vh, 520px);
 }
 
 .portfolio-featured .project-body {
