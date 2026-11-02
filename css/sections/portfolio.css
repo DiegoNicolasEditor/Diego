@@ -472,18 +472,18 @@
 .portfolio-featured .project-card.is-prev,
 .portfolio-featured .project-card.is-next {
   z-index: 1;
-  opacity: 0.5;
+  opacity: 0.65;
   width: min(70%, 760px);
   transform: translateY(-50%) scale(0.86);
 }
 
 .portfolio-featured .project-card.is-prev {
-  left: 20%;
+  left: 8%;
 }
 
 .portfolio-featured .project-card.is-next {
   left: auto;
-  right: 20%;
+  right: 8%;
 }
 
 .portfolio-featured .project-card.format-vertical {
