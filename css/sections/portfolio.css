@@ -474,19 +474,19 @@
 .portfolio-featured .project-card.is-prev,
 .portfolio-featured .project-card.is-next {
   z-index: 1;
-  opacity: 0.5;
+  opacity: 0.34;
   width: min(70%, 760px);
 }
 
 .portfolio-featured .project-card.is-prev {
-  left: 13%;
-  transform: translateY(-50%) scale(0.59) rotateY(24deg);
+  left: 18%;
+  transform: translateY(-50%) scale(0.59) rotateY(12deg);
 }
 
 .portfolio-featured .project-card.is-next {
   left: auto;
-  right: 13%;
-  transform: translateY(-50%) scale(0.59) rotateY(-24deg);
+  right: 18%;
+  transform: translateY(-50%) scale(0.59) rotateY(-12deg);
 }
 
 .portfolio-featured .project-card.format-vertical {
@@ -588,12 +588,12 @@
   .portfolio-featured .project-card.is-prev,
   .portfolio-featured .project-card.is-next { visibility: visible; }
   .portfolio-featured .project-card.is-prev {
-    left: -15%;
-    transform: translateY(-50%) scale(0.59) rotateY(15deg);
+    left: -9%;
+    transform: translateY(-50%) scale(0.59) rotateY(8deg);
   }
   .portfolio-featured .project-card.is-next {
-    right: -15%;
-    transform: translateY(-50%) scale(0.59) rotateY(-15deg);
+    right: -9%;
+    transform: translateY(-50%) scale(0.59) rotateY(-8deg);
   }
   .portfolio-carousel-btn { width: 36px; height: 36px; }
 }
