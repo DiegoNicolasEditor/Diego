@@ -244,6 +244,7 @@
       container.hidden = true;
       return;
     }
+    container.hidden = false;
 
     container.innerHTML = `
       <div class="kx-player-container">
