@@ -115,7 +115,7 @@
     const staggeredGroups = [
       ".hero-tools-list > .hero-tool",
       ".about-meta > .meta-item",
-      ".portfolio-filters > .filter-btn",
+      ".kx-filter-tabs > .kx-filter-tab",
       ".contact-links > .contact-link",
       ".testimonials-track > .testimonial-card",
       ".site-footer .footer-brand",
@@ -203,382 +203,594 @@
     container.hidden = !container.childElementCount;
   }
 
-  // As demonstrações usam o mesmo player leve e sem reprodução automática.
-  function createVideoFigure(clip) {
-    if (!clip || !hasText(clip.caption) || !/^[\w-]{11}$/.test(clip.youtubeId || "")) return null;
-    const figure = createEl("figure", "project-evidence-clip");
-    if (clip.format === "vertical") figure.classList.add("is-vertical");
-    const media = createEl("div", "project-media");
-    const wrapper = createEl("div", "video-embed");
-    const iframe = document.createElement("iframe");
-    iframe.src = `https://www.youtube-nocookie.com/embed/${clip.youtubeId}?rel=0&modestbranding=1`;
-    iframe.title = clip.caption;
-    iframe.loading = "lazy";
-    iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
-    iframe.allowFullscreen = true;
-    wrapper.appendChild(iframe);
-    media.appendChild(wrapper);
-    figure.appendChild(media);
-    figure.appendChild(createEl("figcaption", null, clip.caption));
-    return figure;
+  /* ---------- Ícones Phosphor do Player (Estilo kxeditor) ---------- */
+  const KX_ICONS = {
+    caretLeft: '<svg viewBox="0 0 256 256" width="22" height="22" fill="currentColor" aria-hidden="true"><path d="M165.66 202.34a8 8 0 0 1-11.32 11.32l-80-80a8 8 0 0 1 0-11.32l80-80a8 8 0 0 1 11.32 11.32L91.31 128Z"/></svg>',
+    caretRight: '<svg viewBox="0 0 256 256" width="22" height="22" fill="currentColor" aria-hidden="true"><path d="M181.66 133.66l-80 80a8 8 0 0 1-11.32-11.32L164.69 128 90.34 53.66a8 8 0 0 1 11.32-11.32l80 80a8 8 0 0 1 0 11.32Z"/></svg>',
+    play: '<svg viewBox="0 0 256 256" width="24" height="24" fill="currentColor" aria-hidden="true"><path d="M240 128a15.74 15.74 0 0 1-7.6 13.51L88.32 229.65a16 16 0 0 1-16.2.3A15.86 15.86 0 0 1 64 216.13V39.87a15.86 15.86 0 0 1 8.12-13.82 16 16 0 0 1 16.2.3l144.08 88.14A15.74 15.74 0 0 1 240 128Z"/></svg>',
+    pause: '<svg viewBox="0 0 256 256" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M216 48v160a16 16 0 0 1-16 16h-40a16 16 0 0 1-16-16V48a16 16 0 0 1 16-16h40a16 16 0 0 1 16 16Zm-96 0v160a16 16 0 0 1-16 16H64a16 16 0 0 1-16-16V48a16 16 0 0 1 16-16h40a16 16 0 0 1 16 16Z"/></svg>',
+    volumeHigh: '<svg viewBox="0 0 256 256" width="20" height="20" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M152 72v112a8 8 0 0 1-12.8 6.4L88 152H40a8 8 0 0 1-8-8v-32a8 8 0 0 1 8-8h48l51.2-38.4A8 8 0 0 1 152 72Z" fill="currentColor"/><path d="M192 104a32 32 0 0 1 0 48"/><path d="M224 88a64 64 0 0 1 0 80"/></svg>',
+    volumeLow: '<svg viewBox="0 0 256 256" width="20" height="20" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M152 72v112a8 8 0 0 1-12.8 6.4L88 152H40a8 8 0 0 1-8-8v-32a8 8 0 0 1 8-8h48l51.2-38.4A8 8 0 0 1 152 72Z" fill="currentColor"/><path d="M192 104a32 32 0 0 1 0 48"/></svg>',
+    volumeMute: '<svg viewBox="0 0 256 256" width="20" height="20" fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M152 72v112a8 8 0 0 1-12.8 6.4L88 152H40a8 8 0 0 1-8-8v-32a8 8 0 0 1 8-8h48l51.2-38.4A8 8 0 0 1 152 72Z" fill="currentColor"/><line x1="200" y1="112" x2="232" y2="144"/><line x1="232" y1="112" x2="200" y2="144"/></svg>',
+    fullscreen: '<svg viewBox="0 0 256 256" width="18" height="18" fill="none" stroke="currentColor" stroke-width="20" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="168 48 208 48 208 88"/><line x1="208" y1="48" x2="152" y2="104"/><polyline points="88 208 48 208 48 168"/><line x1="48" y1="208" x2="104" y2="152"/><polyline points="208 168 208 208 168 208"/><line x1="208" y1="208" x2="152" y2="152"/><polyline points="48 88 48 48 88 48"/><line x1="48" y1="48" x2="104" y2="104"/></svg>'
+  };
+
+  function formatTime(seconds) {
+    if (isNaN(seconds) || seconds < 0) return "00:00";
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
   }
 
-  function appendProjectEvidence(article, project) {
-    const evidence = createEl("div", "project-evidence");
-    if (Array.isArray(project.demonstrations)) {
-      project.demonstrations.forEach((clip) => {
-        const figure = createVideoFigure(clip);
-        if (figure) evidence.appendChild(figure);
-      });
-    }
-    const comparison = project.comparison;
-    // Só publica o par completo, com legendas e autorização explícita.
-    if (comparison && comparison.authorized === true) {
-      const before = createVideoFigure(comparison.before);
-      const after = createVideoFigure(comparison.after);
-      if (before && after) {
-        const pair = createEl("div", "project-comparison");
-        pair.appendChild(before);
-        pair.appendChild(after);
-        evidence.appendChild(pair);
-      }
-    }
-    if (evidence.childElementCount) article.appendChild(evidence);
+  function getProjectThumbnail(item) {
+    if (item.thumbnail) return item.thumbnail;
+    if (item.poster) return item.poster;
+    if (item.youtubeId) return `https://i.ytimg.com/vi/${encodeURIComponent(item.youtubeId)}/hqdefault.jpg`;
+    return "";
   }
 
-  /* ---------- Portfólio ---------- */
-  function renderProjectPreview(project, media) {
-    const thumbnail = document.createElement("img");
-    thumbnail.src = `https://i.ytimg.com/vi/${encodeURIComponent(project.youtubeId)}/hqdefault.jpg`;
-    thumbnail.alt = `Prévia do vídeo ${project.title}`;
-    thumbnail.width = 480;
-    thumbnail.height = 360;
-    thumbnail.loading = "lazy";
-    thumbnail.decoding = "async";
-    thumbnail.fetchPriority = "low";
-    media.replaceChildren(thumbnail);
+  /* ---------- Motor do Player 3D Estilo kxeditor ---------- */
+  function createKxPlayer(container, config) {
+    if (!container) return;
 
-    const isShort = getProjectType(project) === "short";
-    const playButton = createEl("button", "video-play-button");
-    playButton.setAttribute(
-      "aria-label",
-      isShort ? `Assistir ${project.title} nesta página` : `Reproduzir ${project.title}`,
-    );
-    playButton.innerHTML = '<svg aria-hidden="true" viewBox="0 0 24 24"><path d="m9 6 10 6-10 6z" /></svg>';
-    if (isShort) {
-      playButton.type = "button";
-      playButton.addEventListener("click", () => createInlineShortPlayer(project, media));
-    } else {
-      playButton.type = "button";
-      playButton.addEventListener("click", () => createProjectPlayer(project));
-    }
-    media.appendChild(playButton);
-  }
+    const {
+      title,
+      description,
+      playerType, // "short" ou "long"
+      items = [],
+    } = config;
 
-  function createInlineShortPlayer(project, media) {
-    if (media.classList.contains("is-playing")) return;
-
-    const wrapper = createEl("div", "video-embed short-video-embed");
-    const iframe = document.createElement("iframe");
-    iframe.src = `https://www.youtube.com/embed/${encodeURIComponent(project.youtubeId)}?autoplay=1&playsinline=1&controls=1&rel=0`;
-    iframe.title = project.title;
-    iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
-    iframe.referrerPolicy = "strict-origin-when-cross-origin";
-    iframe.allowFullscreen = true;
-    wrapper.appendChild(iframe);
-    media.classList.add("is-playing");
-    media.appendChild(wrapper);
-  }
-
-  function stopInlineShortPlayer(card) {
-    const media = qs(".project-media.is-playing", card);
-    if (!media) return;
-    media.querySelector(".short-video-embed")?.remove();
-    media.classList.remove("is-playing");
-  }
-
-  function createProjectPlayer(project) {
-    const dialog = qs("#video-dialog");
-    const player = qs("#video-dialog-player", dialog);
-    const wrapper = createEl("div", "video-embed");
-    const iframe = document.createElement("iframe");
-    iframe.src = `https://www.youtube-nocookie.com/embed/${project.youtubeId}?rel=0&autoplay=1&playsinline=1`;
-    iframe.title = project.title;
-    iframe.allow =
-      "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
-    iframe.referrerPolicy = "strict-origin-when-cross-origin";
-    iframe.allowFullscreen = true;
-    wrapper.appendChild(iframe);
-    player.replaceChildren(wrapper);
-    dialog.showModal();
-  }
-
-  function initVideoDialog() {
-    const dialog = qs("#video-dialog");
-    if (!dialog) return;
-
-    const player = qs("#video-dialog-player", dialog);
-    const closeButton = qs(".video-dialog-close", dialog);
-    if (!player || !closeButton) return;
-
-    closeButton.addEventListener("click", () => dialog.close());
-    dialog.addEventListener("click", (event) => {
-      if (event.target === dialog) dialog.close();
-    });
-    dialog.addEventListener("close", () => player.replaceChildren());
-  }
-
-  function createProjectCard(project) {
-    const article = createEl("article", "project-card");
-    article.dataset.title = project.title;
-    if (project.format) article.classList.add(`format-${project.format}`);
-
-    const media = createEl("div", "project-media");
-
-    if (project.youtubeId) {
-      article.dataset.youtubeId = project.youtubeId;
-      renderProjectPreview(project, media);
-    } else if (project.poster) {
-      // Se algum dia quiser usar imagem no lugar do vídeo
-      const img = document.createElement("img");
-      img.src = project.poster;
-      img.alt = `Prévia do projeto ${project.title}`;
-      img.loading = "lazy";
-      img.decoding = "async";
-      media.appendChild(img);
+    if (!items.length) {
+      container.hidden = true;
+      return;
     }
 
-    const body = createEl("div", "project-body");
-    if (project.category) {
-      const tagClass = getProjectType(project) === "video" ? "tag" : "tag tag-yellow";
-      body.appendChild(createEl("span", tagClass, project.category));
-    }
-    body.appendChild(createEl("h3", "project-title", project.title));
-    if (project.description) {
-      body.appendChild(createEl("p", "project-description", project.description));
-    }
+    container.innerHTML = `
+      <div class="kx-player-container">
+        <div class="kx-player-header">
+          <h2 class="kx-player-title">${title}</h2>
+          <p class="kx-player-desc">${description}</p>
+        </div>
+        <div class="kx-filter-tabs" role="tablist"></div>
+        <div class="kx-carousel-stage" tabindex="0">
+          <button type="button" class="kx-nav-btn kx-nav-prev" aria-label="Vídeo anterior">
+            ${KX_ICONS.caretLeft}
+          </button>
+          <button type="button" class="kx-nav-btn kx-nav-next" aria-label="Próximo vídeo">
+            ${KX_ICONS.caretRight}
+          </button>
+          <div class="kx-perspective-wrapper"></div>
+        </div>
+        <div class="kx-pagination"></div>
+      </div>
+    `;
 
-    // A autoria nunca é deduzida: aparece somente com o texto informado.
-    if (hasText(project.authorship)) {
-      body.appendChild(createEl("p", "project-authorship", project.authorship));
-    }
-    appendDetails(body, project.details);
-    if (Array.isArray(project.techniques)) {
-      const techniques = project.techniques.filter(hasText);
-      if (techniques.length) {
-        const list = createEl("ul", "project-techniques");
-        techniques.forEach((text) => list.appendChild(createEl("li", null, text)));
-        body.appendChild(list);
-      }
-    }
+    const filterTabsContainer = qs(".kx-filter-tabs", container);
+    const stage = qs(".kx-carousel-stage", container);
+    const perspectiveWrapper = qs(".kx-perspective-wrapper", container);
+    const paginationContainer = qs(".kx-pagination", container);
+    const prevBtn = qs(".kx-nav-prev", container);
+    const nextBtn = qs(".kx-nav-next", container);
 
-    article.appendChild(media);
-    if (getProjectType(project) !== "short") article.appendChild(body);
-    appendProjectEvidence(article, project);
-    return article;
-  }
-
-  // Descobre a categoria do projeto (se "type" não for informado,
-  // usa o formato: vertical = Short, horizontal = Vídeo)
-  function getProjectType(project) {
-    if (project.type) return project.type;
-    return project.format === "vertical" ? "short" : "video";
-  }
-
-  function initPortfolio() {
-    const featuredContainer = qs("#portfolio-featured");
-    if (!featuredContainer) return;
-
-    const priorityOf = (project) => Number.isFinite(project.priority) ? project.priority : 0;
-    const orderedProjects = [...projects].sort((a, b) => priorityOf(b) - priorityOf(a));
-    const cards = orderedProjects.map((project) => {
-      const type = getProjectType(project);
-      const card = createProjectCard(project);
-      card.dataset.type = type;
-      featuredContainer.appendChild(card);
-      return card;
-    });
-
-    initPortfolioFilters(cards, featuredContainer);
-  }
-
-  /* ---------- Filtros do portfólio ---------- */
-  function initPortfolioFilters(cards, featuredContainer) {
-    const buttons = qsa("#portfolio-filters .filter-btn");
-    const emptyMsg = qs("#portfolio-empty");
-    const prevBtn = qs('[data-portfolio-carousel="prev"]');
-    const nextBtn = qs('[data-portfolio-carousel="next"]');
-    const dotsContainer = qs("#portfolio-carousel-dots");
-    const portfolioSection = qs("#portfolio");
-    if (!buttons.length) return;
-
+    let activeFilter = "Todos";
     let activeIndex = 0;
-    let visibleCards = [];
-    let carouselDots = [];
+    let filteredItems = [...items];
 
-    const updateCarousel = () => {
-      if (!visibleCards.length) {
-        featuredContainer.style.height = "";
-        if (dotsContainer) dotsContainer.replaceChildren();
-        carouselDots = [];
-        if (prevBtn) prevBtn.hidden = true;
-        if (nextBtn) nextBtn.hidden = true;
-        return;
+    // Estados de reprodução
+    let isPlaying = false;
+    let isMuted = false;
+    let volume = 0.4;
+    let duration = 0;
+    let currentTime = 0;
+    let hideControlsTimer = null;
+    let isDraggingProgress = false;
+    let isHoveringVolume = false;
+    let activeVideoEl = null;
+    let activeIframeEl = null;
+
+    // Categorias únicas
+    const rawCategories = items.map((p) => p.category).filter(Boolean);
+    const categories = ["Todos", ...Array.from(new Set(rawCategories))];
+
+    // Renderiza tabs de filtro
+    categories.forEach((cat) => {
+      const btn = createEl("button", "kx-filter-tab", cat);
+      btn.type = "button";
+      if (cat === activeFilter) btn.classList.add("is-active");
+      btn.addEventListener("click", () => {
+        if (activeFilter === cat) return;
+        activeFilter = cat;
+        qsa(".kx-filter-tab", filterTabsContainer).forEach((t) =>
+          t.classList.toggle("is-active", t.textContent === cat)
+        );
+        filteredItems =
+          cat === "Todos"
+            ? [...items]
+            : items.filter((p) => p.category === cat);
+        activeIndex = 0;
+        resetPlayback();
+        render();
+      });
+      filterTabsContainer.appendChild(btn);
+    });
+
+    function resetPlayback() {
+      if (activeVideoEl) {
+        try {
+          activeVideoEl.pause();
+          activeVideoEl.currentTime = 0;
+        } catch (_) {}
+      }
+      if (activeIframeEl) {
+        activeIframeEl.remove();
+        activeIframeEl = null;
+      }
+      isPlaying = false;
+      currentTime = 0;
+      clearTimeout(hideControlsTimer);
+    }
+
+    function scheduleControlsHide(controlsBar) {
+      clearTimeout(hideControlsTimer);
+      if (!controlsBar) return;
+      controlsBar.classList.remove("is-hidden");
+      if (isPlaying && !isDraggingProgress && !isHoveringVolume) {
+        hideControlsTimer = setTimeout(() => {
+          controlsBar.classList.add("is-hidden");
+        }, 1300);
+      }
+    }
+
+    function createSideCard(item, positionClass, direction) {
+      const card = createEl("button", `kx-side-card ${positionClass}`);
+      card.type = "button";
+      card.setAttribute("aria-label", `${item.title} — ${item.category || ""}`);
+
+      const thumbUrl = getProjectThumbnail(item);
+      const isLeft = positionClass.includes("left");
+
+      card.innerHTML = `
+        <img class="kx-side-thumb" src="${thumbUrl}" alt="${item.title}" loading="lazy" />
+        <div class="kx-side-overlay"></div>
+        <div class="kx-side-center-icon">
+          <div class="kx-side-icon-circle">
+            ${isLeft ? KX_ICONS.caretLeft : KX_ICONS.caretRight}
+          </div>
+        </div>
+        <div class="kx-side-caption">
+          <p class="kx-side-title">${item.title}</p>
+          <span class="kx-side-cat">${item.category || ""}</span>
+        </div>
+      `;
+
+      card.addEventListener("click", () => {
+        slideTo(direction);
+      });
+
+      return card;
+    }
+
+    function slideTo(direction) {
+      resetPlayback();
+      const count = filteredItems.length;
+      activeIndex = (activeIndex + direction + count) % count;
+      render();
+    }
+
+    function renderPagination() {
+      paginationContainer.replaceChildren();
+      paginationContainer.style.display = filteredItems.length > 1 ? "flex" : "none";
+      if (prevBtn) prevBtn.style.display = filteredItems.length > 1 ? "flex" : "none";
+      if (nextBtn) nextBtn.style.display = filteredItems.length > 1 ? "flex" : "none";
+
+      filteredItems.forEach((item, idx) => {
+        const dot = createEl("button", "kx-dot");
+        dot.type = "button";
+        dot.setAttribute("aria-label", `Ir para vídeo ${idx + 1}: ${item.title}`);
+        if (idx === activeIndex) dot.classList.add("is-active");
+        dot.addEventListener("click", () => {
+          if (idx === activeIndex) return;
+          const diff = idx - activeIndex;
+          slideTo(diff);
+        });
+        paginationContainer.appendChild(dot);
+      });
+    }
+
+    function render() {
+      perspectiveWrapper.replaceChildren();
+      renderPagination();
+
+      const total = filteredItems.length;
+      if (!total) return;
+
+      const currentItem = filteredItems[activeIndex];
+      const thumbUrl = getProjectThumbnail(currentItem);
+
+      // Índices dos cards laterais
+      const nearLeftIndex = (activeIndex - 1 + total) % total;
+      const farLeftIndex = (activeIndex - 2 + total) % total;
+      const nearRightIndex = (activeIndex + 1) % total;
+      const farRightIndex = (activeIndex + 2) % total;
+
+      // Card Far Left (se houver 3 ou mais)
+      if (total >= 3) {
+        perspectiveWrapper.appendChild(
+          createSideCard(filteredItems[farLeftIndex], "kx-side-far kx-side-far-left", -2)
+        );
       }
 
-      activeIndex = (activeIndex + visibleCards.length) % visibleCards.length;
-      const previousIndex = (activeIndex - 1 + visibleCards.length) % visibleCards.length;
-      const nextIndex = (activeIndex + 1) % visibleCards.length;
-      const isShortCarousel = featuredContainer.classList.contains("is-short-carousel");
-      visibleCards.forEach((card, index) => {
-        const active = index === activeIndex;
-        const isShortNeighbor = isShortCarousel && !active && (index === previousIndex || index === nextIndex);
-        if (!active) stopInlineShortPlayer(card);
-        card.classList.toggle("is-active", active);
-        card.classList.toggle("is-prev", visibleCards.length > 2 && index === previousIndex);
-        card.classList.toggle("is-next", index === nextIndex && !active);
-        if (isShortCarousel) {
-          card.setAttribute("role", isShortNeighbor ? "button" : "group");
-          card.setAttribute("aria-label", isShortNeighbor ? `Ir para o Short ${card.dataset.title}` : `Short ${card.dataset.title}`);
-          card.setAttribute("aria-hidden", active || isShortNeighbor ? "false" : "true");
-          card.tabIndex = isShortNeighbor ? 0 : -1;
-          card.inert = !active && !isShortNeighbor;
-          const playButton = qs(".video-play-button", card);
-          if (playButton) playButton.disabled = isShortNeighbor;
+      // Card Near Left (se houver 2 ou mais)
+      if (total >= 2) {
+        perspectiveWrapper.appendChild(
+          createSideCard(filteredItems[nearLeftIndex], "kx-side-near kx-side-near-left", -1)
+        );
+      }
+
+      // Card Principal do Centro
+      const mainCard = createEl("div", "kx-main-card");
+      mainCard.innerHTML = `
+        <video class="kx-main-video" poster="${thumbUrl}" playsinline preload="metadata" loop></video>
+        <div class="kx-play-center">
+          <button type="button" class="kx-play-center-btn" aria-label="Reproduzir vídeo">
+            ${KX_ICONS.play}
+          </button>
+        </div>
+        <div class="kx-controls-bar">
+          <div class="kx-controls-top">
+            <div class="kx-controls-title-info">
+              <p class="kx-controls-title">${currentItem.title}</p>
+              <span class="kx-controls-cat">${currentItem.category || ""}</span>
+            </div>
+            <div class="kx-controls-time">00:00 / 00:00</div>
+          </div>
+          <div class="kx-progress-box">
+            <input type="range" class="kx-progress-range" min="0" max="100" step="0.1" value="0" aria-label="Progresso do vídeo" />
+          </div>
+          <div class="kx-controls-bottom">
+            <div class="kx-controls-left">
+              <button type="button" class="kx-ctrl-btn kx-play-btn" aria-label="Reproduzir">
+                ${KX_ICONS.play}
+              </button>
+              <div class="kx-volume-box">
+                <button type="button" class="kx-ctrl-btn kx-vol-btn" aria-label="Silenciar">
+                  ${KX_ICONS.volumeHigh}
+                </button>
+                <div class="kx-volume-popup">
+                  <input type="range" class="kx-volume-range" min="0" max="1" step="0.05" value="${volume}" aria-label="Volume" />
+                </div>
+              </div>
+            </div>
+            <div class="kx-controls-right">
+              <button type="button" class="kx-ctrl-btn kx-fullscreen-btn" aria-label="Tela cheia">
+                ${KX_ICONS.fullscreen}
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+
+      const video = qs(".kx-main-video", mainCard);
+      const playCenter = qs(".kx-play-center", mainCard);
+      const playCenterBtn = qs(".kx-play-center-btn", mainCard);
+      const controlsBar = qs(".kx-controls-bar", mainCard);
+      const playBtn = qs(".kx-play-btn", mainCard);
+      const volBtn = qs(".kx-vol-btn", mainCard);
+      const volumeRange = qs(".kx-volume-range", mainCard);
+      const progressRange = qs(".kx-progress-range", mainCard);
+      const timeDisplay = qs(".kx-controls-time", mainCard);
+      const fullscreenBtn = qs(".kx-fullscreen-btn", mainCard);
+      const volumeBox = qs(".kx-volume-box", mainCard);
+
+      activeVideoEl = video;
+
+      const hasDirectVideo = Boolean(currentItem.video);
+
+      if (hasDirectVideo) {
+        video.src = currentItem.video;
+        video.volume = volume;
+        video.muted = isMuted;
+      }
+
+      function updateVolIcon() {
+        if (isMuted || volume === 0) {
+          volBtn.innerHTML = KX_ICONS.volumeMute;
+          volBtn.setAttribute("aria-label", "Ativar som");
+        } else if (volume < 0.5) {
+          volBtn.innerHTML = KX_ICONS.volumeLow;
+          volBtn.setAttribute("aria-label", "Silenciar");
         } else {
-          card.removeAttribute("role");
-          card.removeAttribute("aria-label");
-          card.removeAttribute("tabindex");
-          card.setAttribute("aria-hidden", active ? "false" : "true");
-          card.inert = !active;
-          const playButton = qs(".video-play-button", card);
-          if (playButton) playButton.disabled = false;
+          volBtn.innerHTML = KX_ICONS.volumeHigh;
+          volBtn.setAttribute("aria-label", "Silenciar");
         }
-      });
+      }
 
-      carouselDots.forEach((dot, index) => {
-        const active = index === activeIndex;
-        dot.classList.toggle("is-active", active);
-        dot.setAttribute("aria-pressed", active ? "true" : "false");
-      });
+      function updatePlayState(playing) {
+        isPlaying = playing;
+        if (playing) {
+          playCenter.classList.add("is-hidden");
+          playBtn.innerHTML = KX_ICONS.pause;
+          playBtn.setAttribute("aria-label", "Pausar");
+        } else {
+          playCenter.classList.remove("is-hidden");
+          playBtn.innerHTML = KX_ICONS.play;
+          playBtn.setAttribute("aria-label", "Reproduzir");
+        }
+        scheduleControlsHide(controlsBar);
+      }
 
-      const activeCard = visibleCards[activeIndex];
-      featuredContainer.style.height = `${activeCard.offsetHeight}px`;
-      const hasNeighbors = visibleCards.length > 1;
-      if (prevBtn) prevBtn.hidden = !hasNeighbors;
-      if (nextBtn) nextBtn.hidden = !hasNeighbors;
-    };
+      function togglePlay() {
+        if (hasDirectVideo) {
+          if (video.paused) {
+            video
+              .play()
+              .then(() => updatePlayState(true))
+              .catch(() => {
+                video.muted = true;
+                isMuted = true;
+                updateVolIcon();
+                video.play().then(() => updatePlayState(true)).catch(() => {});
+              });
+          } else {
+            video.pause();
+            updatePlayState(false);
+          }
+        } else if (currentItem.youtubeId) {
+          // Incorpora o YouTube dentro do próprio frame do player
+          if (!activeIframeEl) {
+            const iframe = document.createElement("iframe");
+            iframe.className = "kx-main-iframe";
+            iframe.src = `https://www.youtube.com/embed/${encodeURIComponent(
+              currentItem.youtubeId
+            )}?autoplay=1&playsinline=1&rel=0&modestbranding=1&enablejsapi=1`;
+            iframe.title = currentItem.title;
+            iframe.referrerPolicy = "strict-origin-when-cross-origin";
+            iframe.allow =
+              "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+            iframe.allowFullscreen = true;
+            mainCard.prepend(iframe);
+            activeIframeEl = iframe;
+            video.style.display = "none";
+            playCenter.classList.add("is-hidden");
+            controlsBar.classList.add("is-hidden");
+            isPlaying = true;
+          }
+        }
+      }
 
-    const renderCarouselDots = () => {
-      if (!dotsContainer) return;
-      dotsContainer.replaceChildren();
-      carouselDots = visibleCards.map((card, index) => {
-        const dot = createEl("button", "portfolio-carousel-dot");
-        dot.type = "button";
-        dot.setAttribute("aria-label", `Ir para ${card.dataset.title}`);
-        dot.setAttribute("aria-pressed", "false");
-        dot.addEventListener("click", () => {
-          if (index === activeIndex) return;
-          activeIndex = index;
-          updateCarousel();
+      // Eventos do vídeo direto
+      if (hasDirectVideo) {
+        video.addEventListener("loadedmetadata", () => {
+          duration = video.duration || 0;
+          progressRange.max = duration;
+          timeDisplay.textContent = `${formatTime(video.currentTime)} / ${formatTime(duration)}`;
         });
-        dotsContainer.appendChild(dot);
-        return dot;
-      });
-    };
 
-    const move = (step) => {
-      if (visibleCards.length < 2) return;
-      activeIndex += step;
-      updateCarousel();
-    };
+        video.addEventListener("timeupdate", () => {
+          if (!isDraggingProgress) {
+            currentTime = video.currentTime;
+            progressRange.value = currentTime;
+            timeDisplay.textContent = `${formatTime(currentTime)} / ${formatTime(duration || video.duration)}`;
+          }
+        });
 
-    cards.forEach((card) => {
-      card.addEventListener("click", () => {
-        const targetIndex = visibleCards.indexOf(card);
-        if (!featuredContainer.classList.contains("is-short-carousel")
-          || targetIndex < 0
-          || targetIndex === activeIndex
-          || (!card.classList.contains("is-prev") && !card.classList.contains("is-next"))) return;
-        activeIndex = targetIndex;
-        updateCarousel();
+        video.addEventListener("play", () => updatePlayState(true));
+        video.addEventListener("pause", () => updatePlayState(false));
+
+        progressRange.addEventListener("input", (e) => {
+          isDraggingProgress = true;
+          const val = parseFloat(e.target.value);
+          timeDisplay.textContent = `${formatTime(val)} / ${formatTime(duration || video.duration)}`;
+        });
+
+        progressRange.addEventListener("change", (e) => {
+          isDraggingProgress = false;
+          const val = parseFloat(e.target.value);
+          video.currentTime = val;
+          scheduleControlsHide(controlsBar);
+        });
+
+        playBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          togglePlay();
+        });
+
+        volBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          isMuted = !isMuted;
+          video.muted = isMuted;
+          if (!isMuted && volume === 0) {
+            volume = 0.5;
+            video.volume = 0.5;
+            volumeRange.value = 0.5;
+          }
+          updateVolIcon();
+          scheduleControlsHide(controlsBar);
+        });
+
+        volumeRange.addEventListener("input", (e) => {
+          e.stopPropagation();
+          const val = parseFloat(e.target.value);
+          volume = val;
+          video.volume = val;
+          isMuted = val === 0;
+          video.muted = isMuted;
+          updateVolIcon();
+        });
+
+        fullscreenBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          if (document.fullscreenElement) {
+            document.exitFullscreen().catch(() => {});
+          } else {
+            (mainCard.requestFullscreen || mainCard.webkitRequestFullscreen || mainCard.msRequestFullscreen)
+              ?.call(mainCard)
+              .catch(() => {});
+          }
+        });
+
+        volumeBox.addEventListener("mouseenter", () => {
+          isHoveringVolume = true;
+          scheduleControlsHide(controlsBar);
+        });
+        volumeBox.addEventListener("mouseleave", () => {
+          isHoveringVolume = false;
+          scheduleControlsHide(controlsBar);
+        });
+      } else {
+        // Se for YouTube, simplifica o botão play/fullscreen
+        playBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          togglePlay();
+        });
+        volBtn.style.display = "none";
+        volumeRange.style.display = "none";
+        progressRange.style.display = "none";
+        timeDisplay.style.display = "none";
+        fullscreenBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          if (document.fullscreenElement) {
+            document.exitFullscreen().catch(() => {});
+          } else {
+            mainCard.requestFullscreen?.().catch(() => {});
+          }
+        });
+      }
+
+      playCenterBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        togglePlay();
       });
-      card.addEventListener("keydown", (event) => {
-        if ((event.key !== "Enter" && event.key !== " ") || card.tabIndex < 0) return;
-        event.preventDefault();
-        const targetIndex = visibleCards.indexOf(card);
-        if (targetIndex < 0) return;
-        activeIndex = targetIndex;
-        updateCarousel();
-        qs(".video-play-button", card)?.focus();
+
+      mainCard.addEventListener("click", () => {
+        if (!activeIframeEl) togglePlay();
       });
+
+      mainCard.addEventListener("mousemove", () => scheduleControlsHide(controlsBar));
+      mainCard.addEventListener("mouseenter", () => scheduleControlsHide(controlsBar));
+      mainCard.addEventListener("mouseleave", () => {
+        if (isPlaying && !isDraggingProgress && !isHoveringVolume) {
+          controlsBar.classList.add("is-hidden");
+        }
+      });
+
+      perspectiveWrapper.appendChild(mainCard);
+
+      // Card Near Right (se houver 2 ou mais)
+      if (total >= 2) {
+        perspectiveWrapper.appendChild(
+          createSideCard(filteredItems[nearRightIndex], "kx-side-near kx-side-near-right", 1)
+        );
+      }
+
+      // Card Far Right (se houver 3 ou mais)
+      if (total >= 3) {
+        perspectiveWrapper.appendChild(
+          createSideCard(filteredItems[farRightIndex], "kx-side-far kx-side-far-right", 2)
+        );
+      }
+    }
+
+    // Botões de navegação
+    prevBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      slideTo(-1);
     });
 
-    if (prevBtn) prevBtn.addEventListener("click", () => move(-1));
-    if (nextBtn) nextBtn.addEventListener("click", () => move(1));
-
-    featuredContainer.closest(".portfolio-carousel").addEventListener("keydown", (event) => {
-      if (event.key === "ArrowLeft") move(-1);
-      if (event.key === "ArrowRight") move(1);
+    nextBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      slideTo(1);
     });
 
+    // Teclado
+    stage.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        slideTo(-1);
+      } else if (e.key === "ArrowRight") {
+        e.preventDefault();
+        slideTo(1);
+      } else if (e.key === " " && e.target === stage) {
+        e.preventDefault();
+        const centerBtn = qs(".kx-play-center-btn", stage);
+        if (centerBtn) centerBtn.click();
+      }
+    });
+
+    // Touch / Swipe
     let touchStartX = 0;
-    featuredContainer.addEventListener("touchstart", (event) => {
-      touchStartX = event.touches[0].clientX;
-    }, { passive: true });
-    featuredContainer.addEventListener("touchend", (event) => {
-      const delta = event.changedTouches[0].clientX - touchStartX;
-      if (Math.abs(delta) > 40) move(delta < 0 ? 1 : -1);
-    }, { passive: true });
-
-    let resizeTimer;
-    window.addEventListener("resize", () => {
-      clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(updateCarousel, 150);
-    });
-
-    const applyFilter = (filter) => {
-      buttons.forEach((btn) => {
-        const active = btn.dataset.filter === filter;
-        btn.classList.toggle("is-active", active);
-        btn.setAttribute("aria-selected", active ? "true" : "false");
-      });
-
-      let visibleCount = 0;
-      cards.forEach((card) => {
-        const show = card.dataset.type === filter;
-        card.hidden = !show;
-        card.inert = !show;
-        card.setAttribute("aria-hidden", show ? "false" : "true");
-        if (filter !== "short") {
-          card.removeAttribute("role");
-          card.removeAttribute("aria-label");
-          card.removeAttribute("tabindex");
-          const playButton = qs(".video-play-button", card);
-          if (playButton) playButton.disabled = false;
+    stage.addEventListener(
+      "touchstart",
+      (e) => {
+        touchStartX = e.touches[0].clientX;
+      },
+      { passive: true }
+    );
+    stage.addEventListener(
+      "touchend",
+      (e) => {
+        const delta = e.changedTouches[0].clientX - touchStartX;
+        if (Math.abs(delta) > 40) {
+          slideTo(delta < 0 ? 1 : -1);
         }
-        if (!show) card.classList.remove("is-active", "is-prev", "is-next");
-        if (show) {
-          visibleCount++;
-          card.classList.add("is-visible");
-        }
+      },
+      { passive: true }
+    );
+
+    // Auto-pausa quando rolar para fora da tela (IntersectionObserver)
+    if ("IntersectionObserver" in window) {
+      let wasPlayingBeforeScroll = false;
+      const obs = new IntersectionObserver(
+        (entries) => {
+          const entry = entries[0];
+          if (!activeVideoEl) return;
+          if (entry.isIntersecting) {
+            if (wasPlayingBeforeScroll && activeVideoEl.paused) {
+              activeVideoEl.play().catch(() => {});
+            }
+          } else {
+            wasPlayingBeforeScroll = !activeVideoEl.paused;
+            if (!activeVideoEl.paused) activeVideoEl.pause();
+          }
+        },
+        { threshold: 0.15 }
+      );
+      obs.observe(container);
+    }
+
+    render();
+  }
+
+  /* ---------- Inicialização dos Players do Portfólio ---------- */
+  function initKxPortfolio() {
+    const shortsContainer = qs("#kx-shorts-section");
+    const longsContainer = qs("#kx-longs-section");
+
+    // Separa os projetos em curtos (verticais) e longos (horizontais)
+    const shortProjects = projects.filter(
+      (p) => p.format === "vertical" || p.type === "short"
+    );
+    const longProjects = projects.filter(
+      (p) => p.format === "horizontal" || p.type === "video" || p.type === "long"
+    );
+
+    if (shortsContainer) {
+      createKxPlayer(shortsContainer, {
+        title: "Vídeos Curtos",
+        description: "Vídeos verticais de alta conversão para Reels, Shorts e TikTok.",
+        playerType: "short",
+        items: shortProjects,
       });
+    }
 
-      visibleCards = cards.filter((card) => card.dataset.type === filter);
-      activeIndex = 0;
-      featuredContainer.classList.toggle("is-short-carousel", filter === "short");
-      if (portfolioSection) portfolioSection.classList.toggle("is-short-filter", filter === "short");
-      renderCarouselDots();
-      updateCarousel();
-      if (emptyMsg) emptyMsg.hidden = visibleCount > 0;
-    };
-
-    buttons.forEach((btn) => {
-      btn.addEventListener("click", () => applyFilter(btn.dataset.filter));
-    });
-
-    const initial = qs("#portfolio-filters .filter-btn.is-active") || buttons[0];
-    applyFilter(initial.dataset.filter);
+    if (longsContainer) {
+      createKxPlayer(longsContainer, {
+        title: "Vídeos Longos",
+        description: "Edições imersivas em widescreen para YouTube e comerciais.",
+        playerType: "long",
+        items: longProjects,
+      });
+    }
   }
 
   /* ---------- Depoimentos (carrossel) ---------- */
@@ -641,15 +853,8 @@
 
     let index = 0;
 
-    // Quantos cards cabem na tela
-    function getPerView() {
-      if (window.innerWidth <= 768) return 1;
-      if (window.innerWidth <= 1024) return 2;
-      return 3;
-    }
-
     function getMaxIndex() {
-      return Math.max(0, testimonials.length - getPerView());
+      return Math.max(0, testimonials.length - 1);
     }
 
     // Cria as bolinhas de navegação
@@ -771,8 +976,7 @@
   /* ---------- Inicia tudo ---------- */
   function init() {
     initNavigation();
-    initPortfolio();
-    initVideoDialog();
+    initKxPortfolio();
     initProfileDetails();
     initTestimonials();
     initContact();

@@ -23,20 +23,17 @@
   --color-ink-raised: #141414;      /* superfície elevada */
   --color-ink-line: #242424;        /* linhas discretas */
 
-  /* ---------- Neutros claros ---------- */
-  --color-paper: #070707;           /* fundo alternativo preto */
-  --color-paper-soft: #101010;      /* cartões no fundo alternativo */
-  --color-paper-line: #242424;      /* bordas no fundo alternativo */
+  /* ---------- Neutros alternativos ---------- */
+  --color-paper: #0e0e0e;           /* fundo carvão das seções alternadas */
+  --color-paper-soft: #151515;      /* cartões nas seções alternadas */
+  --color-paper-line: #2b2b2b;      /* bordas das seções alternadas */
 
-  /* ---------- Botão do player de Shorts ---------- */
-  --color-short-player-shade: rgba(0, 0, 0, 0.42);
-  --color-short-player-button: rgba(244, 243, 239, 0.92);
 
   /* ---------- Textos ---------- */
   --color-text-light: #f4f3ef;      /* texto principal */
   --color-text-light-muted: #b2b1ad;
-  --color-text-dark: #f1f0ec;       /* texto nas superfícies alternativas */
-  --color-text-dark-muted: #aaa9a5;
+  --color-text-dark: #f4f3ef;       /* texto nas superfícies alternativas */
+  --color-text-dark-muted: #b4b2ac;
 
   /* ---------- Fontes ---------- */
   --font-display: "Montserrat", system-ui, sans-serif;
@@ -46,7 +43,7 @@
   /* ---------- Tamanhos e espaçamentos ---------- */
   --container: 1180px;
   --gutter: clamp(1.25rem, 4vw, 2.5rem);
-  --section-space: clamp(4rem, 8vw, 6.5rem);
+  --section-space: clamp(4.5rem, 8vw, 7rem);
   --header-height: 68px;
 
   --radius-sm: 7px;
@@ -54,6 +51,7 @@
   --radius-lg: 16px;
 
   /* ---------- Sombras ---------- */
+  --shadow-soft: 0 10px 24px rgba(0, 0, 0, 0.18);
   --shadow: 0 14px 34px rgba(0, 0, 0, 0.28);
   --shadow-hard: 0 16px 36px rgba(0, 0, 0, 0.24);
 
@@ -83,7 +81,7 @@
 .theme-light {
   --bg: var(--color-paper);
   --surface: var(--color-paper-soft);
-  --surface-hover: #171717;
+  --surface-hover: #1c1c1c;
   --line: var(--color-paper-line);
   --text: var(--color-text-dark);
   --text-muted: var(--color-text-dark-muted);

@@ -1,4 +1,4 @@
-========================================================
+﻿========================================================
   GUIA PASSO A PASSO — SITE DYO
 ========================================================
 
@@ -16,7 +16,8 @@ js/content.js
   frequência.
 
 index.html
-  Títulos, parágrafos e textos fixos das seções.
+  Títulos, parágrafos e textos fixos das seções, incluindo os
+  nomes dos programas exibidos no início do site.
 
 img/
   Fotos, logos, imagens de fundo e ícones.
@@ -98,29 +99,30 @@ o endereço inteiro: use somente o ID.
 
 Escolha o tipo e o formato:
 
-  Vídeo longo horizontal:
-    type: "video"
-    format: "horizontal"
-
-  Short, Reels ou vídeo vertical:
+  VÃ­deo vertical (Shorts / Reels / TikTok):
     type: "short"
     format: "vertical"
 
-  Animação:
-    type: "motion"
+  VÃ­deo horizontal (VÃ­deos Longos / YouTube):
+    type: "video"
     format: "horizontal"
 
-O texto de category é o rótulo que aparece no cartão de Vídeos
-e Motion Design, por exemplo "YouTube" ou "Motion Design".
-Shorts mostram somente o vídeo, sem título ou selo no cartão.
-O type controla em qual filtro o projeto aparece; mantenha os
-valores exatamente como estão acima.
+VocÃª pode usar vÃ­deos do YouTube atravÃ©s do youtubeId:
+  youtubeId: "ID_DO_VIDEO"
 
-Ao clicar no botão de reprodução de um Short, o vídeo é
-reproduzido dentro do próprio cartão, sem sair do site.
-Troque de Short pelas setas, pelos pontos abaixo do carrossel ou
-deslizando o dedo sobre ele no celular.
+Ou arquivos diretos de vÃ­deo (MP4 ou WebM):
+  video: "caminho-ou-link-do-video.mp4"
+  thumbnail: "caminho-ou-link-da-capa.jpg"
 
+O texto de category Ã© a categoria do vÃ­deo (ex.: "Publicidade",
+"Gameplay", "Review"). Ela aparece nos botÃµes de filtro no topo do
+player e na legenda do vÃ­deo.
+
+Os players funcionam com efeito 3D (estilo kxeditor):
+- Os vÃ­deos tocam diretamente na pÃ¡gina com controles modernos de
+  reproduÃ§Ã£o, progresso, volume e tela cheia.
+- Navegue entre os projetos pelas setas laterais, clicando nos cartÃµes
+  vizinhos, pelos pontos na parte inferior ou deslizando no celular.
 Para deixar um projeto antes dos outros, acrescente, por
 exemplo, priority: 2, antes do fechamento }. Um número maior
 aparece primeiro. Se não usar priority, os projetos mantêm a
@@ -162,6 +164,9 @@ um cliente. As fotos de clientes que já estão no site são reais;
 não as substitua por imagens inventadas.
 
 Para remover um depoimento, apague somente o bloco dele.
+
+Com mais de um depoimento, o site mostra um de cada vez em
+um carrossel. Use as setas ou arraste para o lado no celular.
 
 
 5. COMO TROCAR OS LINKS DE CONTATO

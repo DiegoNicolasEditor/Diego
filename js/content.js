@@ -16,46 +16,50 @@
 
 window.SITE_CONTENT = {
   // Informações profissionais opcionais: pares { label: "", text: "" }.
-  // Preencha somente com informações reais. Consulte a seção final do leia-me.txt.
   profileDetails: [],
 
   /* =========================================================
-     PORTFÓLIO — os vídeos do YouTube
+     PORTFÓLIO — SEUS VÍDEOS
      ---------------------------------------------------------
-     Cada bloco { ... } é um vídeo. Pra adicionar outro,
-     copie um bloco inteiro, cole embaixo do último e
-     ajuste as informações.
+     - type: "short" (ou format: "vertical")  → Player de Vídeos Curtos (9:16)
+     - type: "video" (ou format: "horizontal")→ Player de Vídeos Longos (16:9)
 
-     Campo "type" (qual botão de filtro mostra o vídeo):
-       "video"  → botão Vídeos (vídeos longos, horizontais)
-       "short"  → botão Shorts (vídeos curtos, verticais)
-       "motion" → botão Motion Design (animações)
-
-     Como pegar o youtubeId:
-       Link: youtube.com/watch?v=fK036KNKLbQ  →  ID: fK036KNKLbQ
-       Link: youtube.com/shorts/nA2FhmL1bcU   →  ID: nA2FhmL1bcU
+     Você pode usar:
+       video: "videos/nome-do-arquivo.mp4"
+     ou:
+       youtubeId: "ID_DO_VIDEO"
      ========================================================= */
   projects: [
+    // --- VÍDEOS CURTOS (Shorts / Reels / TikTok) ---
     {
-      title: "ok",
-      youtubeId: "kkN-d-8E-0E",
-      category: "video curto",
-      type: "short",
-      format: "vertical",
-    },
-      {
-      title: "Vai comprar um monitor gamer?",
-      youtubeId: "g8xepPKiihs",
-      category: "video curto",
-      type: "short",
-      format: "vertical",
-    },
-    {
-      title: "3 melhores dribles do basquete",
+      title: "Tutorial de dribles",
       youtubeId: "gAlBlcIFumM",
-      category: "video curto",
+      category: "Tutorial",
       type: "short",
       format: "vertical",
+    },
+    {
+      title: "Comer bem faz diferença? - profissionais",
+      youtubeId: "kkN-d-8E-0E",
+      category: "Conteúdo profissional",
+      type: "short",
+      format: "vertical",
+    },
+    {
+      title: "5 melhores monitores - publicidades",
+      youtubeId: "g8xepPKiihs",
+      category: "Publicidade",
+      type: "short",
+      format: "vertical",
+    },
+
+    // --- VÍDEOS LONGOS (YouTube / Widescreen) ---
+    {
+      title: "Mundo eterno - Minecraft",
+      youtubeId: "QWExYEmhqRM",
+      category: "Gameplay",
+      type: "video",
+      format: "horizontal",
     },
   ],
 
