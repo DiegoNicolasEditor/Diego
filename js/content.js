@@ -74,7 +74,7 @@ window.SITE_CONTENT = {
     {
       name: "Lagu",
       handle: "@LaguBR",
-      quote: "Meu Deus que qualidade boa Você é profissional Valeu todo tempo esperada.",
+      quote: "Meu Deus, que qualidade boa! Você é profissional. Valeu todo o tempo de espera.",
       avatar: "img/testimonials/lagu.webp",
     },
   ],
@@ -102,10 +102,10 @@ window.SITE_CONTENT = {
   faq: [
     {
       q: "Quanto tempo leva para editar um vídeo?",
-      a: "Depende do tipo e duração. Shorts costumam ficar prontos em 1–2 dias; vídeos longos de YouTube levam de 3 a 5 dias úteis. Em projetos urgentes posso acelerar — só me avisa!",
+      a: "Shorts levam de 5 a 10 horas para editar, podendo levar mais tempo dependendo da dificuldade. Vídeos longos levam de 1 a 2 dias, também dependendo da dificuldade. Em projetos urgentes, posso acelerar — é só me avisar!",
       en: {
         q: "How long does it take to edit a video?",
-        a: "It depends on the type and length. Shorts are usually ready in 1–2 days; long YouTube videos take 3 to 5 business days. For urgent projects I can speed things up — just let me know!",
+        a: "Shorts take 5 to 10 hours to edit and may take longer depending on the complexity. Long-form videos take 1 to 2 days, also depending on the complexity. For urgent projects, I may be able to speed things up — just let me know!",
       },
     },
     {
@@ -134,10 +134,10 @@ window.SITE_CONTENT = {
     },
     {
       q: "Aceita revisões após entregar?",
-      a: "Claro! Incluo revisões no processo. Se quiser algum ajuste após a entrega, é só falar — fico feliz em deixar o vídeo do jeito que você imaginou.",
+      a: "Sim! Todos os planos e pacotes incluem 3 revisões. Se precisar de algum ajuste, é só falar — fico feliz em deixar o vídeo do jeito que você imaginou.",
       en: {
         q: "Do you accept revisions after delivery?",
-        a: "Of course! Revisions are part of the process. If you want any adjustments after delivery, just say so — I'm happy to make the video exactly how you envisioned it.",
+        a: "Yes! All plans and packages include 3 revisions. If you need any adjustments, just let me know — I'm happy to make the video exactly how you envisioned it.",
       },
     },
   ],
