@@ -6,14 +6,14 @@
 
    Paleta:
      Preto e carvão   → fundos e superfícies
-     Amarelo         → ações e destaques importantes
-     Vermelho        → pequenos detalhes no portfólio
+     Branco e cinza   → ações e destaques
+     Vermelho         → detalhes do portfólio
    ========================================================= */
 
 :root {
-  /* ---------- Cores da marca ---------- */
-  --color-yellow: #dfb94f;          /* amarelo dourado da marca */
-  --color-yellow-strong: #edca6b;   /* realce moderado ao passar o mouse */
+  /* ---------- Cores de destaque ---------- */
+  --color-accent: #f4f3ef;
+  --color-accent-strong: #ffffff;
   --color-red: #df4a50;             /* vermelho reservado aos detalhes do portfólio */
   --color-red-strong: #c63d43;      /* vermelho mais escuro do portfólio */
 
@@ -58,6 +58,17 @@
   /* ---------- Animações ---------- */
   --transition: 200ms ease;
   --transition-slow: 450ms cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* ---------- Fundo escuro e feixes de luz ---------- */
+  --site-tone-cool: rgba(82, 91, 108, 0.16);
+  --site-tone-warm: rgba(94, 78, 66, 0.11);
+  --site-beam-edge: rgba(238, 241, 248, 0.025);
+  --site-beam-core: rgba(238, 241, 248, 0.12);
+  --color-status: #34d399;
+
+  /* ---------- FAQ ---------- */
+  --faq-border: var(--color-ink-line);
+  --faq-bg-open: var(--color-ink-raised);
 }
 
 /* =========================================================
@@ -74,7 +85,7 @@
   --line: var(--color-ink-line);
   --text: var(--color-text-light);
   --text-muted: var(--color-text-light-muted);
-  --emphasis: var(--color-yellow);   /* cor das palavras em destaque */
+  --emphasis: var(--color-accent);   /* cor das palavras em destaque */
   --tag: var(--color-text-light-muted);
 }
 
@@ -85,6 +96,6 @@
   --line: var(--color-paper-line);
   --text: var(--color-text-dark);
   --text-muted: var(--color-text-dark-muted);
-  --emphasis: var(--color-yellow);
+  --emphasis: var(--color-accent);
   --tag: var(--color-text-dark-muted);
 }

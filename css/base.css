@@ -46,14 +46,14 @@ h1, h2, h3, h4 {
   overflow-wrap: break-word;
 }
 
-::selection { background: var(--color-yellow); color: var(--color-ink); }
+::selection { background: var(--color-accent); color: var(--color-ink); }
 
 :focus-visible {
-  outline: 3px solid var(--color-yellow);
+  outline: 3px solid var(--color-accent);
   outline-offset: 3px;
   border-radius: 4px;
 }
-.theme-light :focus-visible { outline-color: var(--color-yellow); }
+.theme-light :focus-visible { outline-color: var(--color-accent); }
 
 /* Link "pular para o conteúdo" (acessibilidade) */
 .skip-link {
@@ -62,7 +62,7 @@ h1, h2, h3, h4 {
   left: 1rem;
   z-index: 100;
   padding: 0.75rem 1rem;
-  background: var(--color-yellow);
+  background: var(--color-accent);
   color: var(--color-ink);
   font-weight: 700;
   border-radius: var(--radius-sm);
@@ -127,14 +127,14 @@ h1, h2, h3, h4 {
 }
 
 /* ---------- Destaques de texto ----------
-   .accent → usa o amarelo da marca com moderação
-   .marker → faixa amarela atrás de uma palavra importante     */
+   .accent → usa o branco da identidade
+   .marker → faixa clara atrás de uma palavra importante       */
 .accent { color: var(--emphasis); }
 
 .marker {
   padding: 0 0.18em;
   color: var(--color-ink);
-  background: linear-gradient(transparent 12%, var(--color-yellow) 12%, var(--color-yellow) 88%, transparent 88%);
+  background: linear-gradient(transparent 12%, var(--color-accent) 12%, var(--color-accent) 88%, transparent 88%);
   -webkit-box-decoration-break: clone;
   box-decoration-break: clone;
 }
@@ -162,21 +162,21 @@ h1, h2, h3, h4 {
 .btn:hover { transform: translateY(-2px); }
 .btn:active { transform: translateY(0) scale(0.98); }
 
-/* Principal: amarelo com texto preto */
+/* Principal: fundo claro com texto escuro */
 .btn-primary {
-  background: var(--color-yellow);
+  background: var(--color-accent);
   color: var(--color-ink);
-  box-shadow: 0 10px 26px rgba(255, 201, 60, 0.22);
+  box-shadow: 0 10px 26px rgba(255, 255, 255, 0.12);
 }
-.btn-primary:hover { background: var(--color-yellow-strong); }
+.btn-primary:hover { background: var(--color-accent-strong); }
 
 /* Ação de contato */
 .btn-red {
-  background: var(--color-yellow);
+  background: var(--color-accent);
   color: var(--color-ink);
   box-shadow: none;
 }
-.btn-red:hover { background: var(--color-yellow-strong); }
+.btn-red:hover { background: var(--color-accent-strong); }
 
 /* Contorno: ação secundária (funciona no claro e no escuro) */
 .btn-outline {
@@ -227,7 +227,7 @@ h1, h2, h3, h4 {
   background: var(--color-ink-raised);
   border-radius: 4px;
 }
-.tag-yellow { background: var(--color-yellow); color: var(--color-ink); }
+.tag-accent { background: var(--color-accent); color: var(--color-ink); }
 
 /* ---------- Animação de entrada (reveal) ---------- */
 .reveal {

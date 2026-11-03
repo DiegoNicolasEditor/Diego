@@ -14,7 +14,7 @@ Static one-page portfolio site for "Dyo" (video editor). Plain HTML/CSS/JS, no b
 ## Conventions
 
 - Code comments and all UI copy are in Brazilian Portuguese and written for a non-programmer.
-- Color system: dark ink + cream paper sections alternate. Yellow = primary buttons and emphasis on dark; red = emphasis on light, tags, the main contact CTA. Use them sparingly.
+- Color system: dark ink + cream paper sections alternate. White and neutral tones = primary buttons and emphasis; red = portfolio details. Use accents sparingly.
 - Never hard-code colors in section files; add a token to `variables.css`.
 - Image paths are local and relative so they work on GitHub Pages, including when the site is served from `/dyooo/`.
 - Breakpoints: 1024 / 900 / 860 (nav collapses) / 768 / 560 / 480.

@@ -68,7 +68,7 @@ window.SITE_CONTENT = {
      ---------------------------------------------------------
      avatar → caminho da foto (coloque o arquivo em
               img/testimonials/). Se deixar vazio (""), o site
-              mostra um círculo amarelo com as iniciais.
+              mostra um círculo neutro com as iniciais.
      ========================================================= */
   testimonials: [
     {
@@ -92,4 +92,53 @@ window.SITE_CONTENT = {
     tiktok: "https://www.tiktok.com/@itsdyo",
     primary: "https://wa.me/5521984315865", // botão grande "Entrar em contato"
   },
+
+  /* =========================================================
+     FAQ — PERGUNTAS FREQUENTES
+     ---------------------------------------------------------
+     Adicione ou remova pares { q: "Pergunta", a: "Resposta" }.
+     Você pode usar en: { q: "...", a: "..." } para tradução.
+     ========================================================= */
+  faq: [
+    {
+      q: "Quanto tempo leva para editar um vídeo?",
+      a: "Depende do tipo e duração. Shorts costumam ficar prontos em 1–2 dias; vídeos longos de YouTube levam de 3 a 5 dias úteis. Em projetos urgentes posso acelerar — só me avisa!",
+      en: {
+        q: "How long does it take to edit a video?",
+        a: "It depends on the type and length. Shorts are usually ready in 1–2 days; long YouTube videos take 3 to 5 business days. For urgent projects I can speed things up — just let me know!",
+      },
+    },
+    {
+      q: "Quais programas você usa?",
+      a: "Trabalho principalmente com Adobe Premiere Pro, After Effects e CapCut. Posso adaptar o fluxo conforme a necessidade do projeto.",
+      en: {
+        q: "What software do you use?",
+        a: "I mainly use Adobe Premiere Pro, After Effects, and CapCut. I can adapt my workflow to your project's needs.",
+      },
+    },
+    {
+      q: "Você edita Shorts e vídeos longos?",
+      a: "Sim! Edito os dois formatos. Tenho experiência com Shorts/Reels/TikToks verticais e também com vídeos horizontais para YouTube.",
+      en: {
+        q: "Do you edit Shorts and long videos?",
+        a: "Yes! I edit both formats. I have experience with vertical Shorts/Reels/TikToks and horizontal YouTube videos.",
+      },
+    },
+    {
+      q: "Como funciona o pagamento?",
+      a: "Combinamos os detalhes pelo WhatsApp ou Discord antes de começar. Aceito Pix, e os valores variam de acordo com a complexidade do projeto.",
+      en: {
+        q: "How does payment work?",
+        a: "We sort out the details on WhatsApp or Discord before starting. I accept Pix, and prices vary based on project complexity.",
+      },
+    },
+    {
+      q: "Aceita revisões após entregar?",
+      a: "Claro! Incluo revisões no processo. Se quiser algum ajuste após a entrega, é só falar — fico feliz em deixar o vídeo do jeito que você imaginou.",
+      en: {
+        q: "Do you accept revisions after delivery?",
+        a: "Of course! Revisions are part of the process. If you want any adjustments after delivery, just say so — I'm happy to make the video exactly how you envisioned it.",
+      },
+    },
+  ],
 };

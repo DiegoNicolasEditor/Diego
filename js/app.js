@@ -18,6 +18,7 @@
   const projects = content.projects || [];
   const testimonials = content.testimonials || [];
   const contactLinks = content.contactLinks || {};
+  const faqItems = content.faq || [];
 
   /* ---------- Funções auxiliares ---------- */
   const qs = (selector, scope = document) => scope.querySelector(selector);
@@ -49,6 +50,31 @@
     const toggle = qs("#nav-toggle");
     const nav = qs("#site-nav");
 
+    const updateActiveLink = () => {
+      if (!nav) return;
+
+      const links = qsa('.site-nav a[href^="#"]', nav);
+      const activationPoint = window.scrollY + window.innerHeight * 0.35;
+      let activeLink = null;
+
+      links.forEach((link) => {
+        const section = document.getElementById(link.hash.slice(1));
+        if (
+          section &&
+          section.getBoundingClientRect().top + window.scrollY <= activationPoint
+        ) {
+          activeLink = link;
+        }
+      });
+
+      links.forEach((link) => {
+        const isActive = link === activeLink;
+        link.classList.toggle("is-active", isActive);
+        if (isActive) link.setAttribute("aria-current", "location");
+        else link.removeAttribute("aria-current");
+      });
+    };
+
     // Escurece o header quando rola a página
     if (header) {
       let scrollUpdatePending = false;
@@ -57,18 +83,25 @@
         scrollUpdatePending = true;
         window.requestAnimationFrame(() => {
           header.classList.toggle("is-scrolled", window.scrollY > 10);
+          updateActiveLink();
           scrollUpdatePending = false;
         });
       };
       onScroll();
       window.addEventListener("scroll", onScroll, { passive: true });
-    }
+    } else updateActiveLink();
 
     if (!toggle || !nav) return;
 
     const setOpen = (open) => {
+      const isEnglish = document.documentElement.lang === "en";
       toggle.setAttribute("aria-expanded", open ? "true" : "false");
-      toggle.setAttribute("aria-label", open ? "Fechar menu" : "Abrir menu");
+      toggle.setAttribute(
+        "aria-label",
+        isEnglish
+          ? (open ? "Close menu" : "Open menu")
+          : (open ? "Fechar menu" : "Abrir menu")
+      );
       nav.classList.toggle("is-open", open);
       document.body.classList.toggle("nav-open", open);
     };
@@ -104,6 +137,7 @@
 
     // Fecha se a tela aumentar (virar computador)
     window.addEventListener("resize", () => {
+      updateActiveLink();
       if (window.innerWidth > 1280) setOpen(false);
     });
   }
@@ -249,15 +283,15 @@
     container.innerHTML = `
       <div class="kx-player-container">
         <div class="kx-player-header">
-          <h2 class="kx-player-title">${title}</h2>
-          <p class="kx-player-desc">${description}</p>
+          <h2 class="kx-player-title" data-i18n="${playerType === "short" ? "portfolio.short.title" : "portfolio.long.title"}">${title}</h2>
+          <p class="kx-player-desc" data-i18n="${playerType === "short" ? "portfolio.short.description" : "portfolio.long.description"}">${description}</p>
         </div>
         <div class="kx-filter-tabs" role="tablist"></div>
         <div class="kx-carousel-stage" tabindex="0">
-          <button type="button" class="kx-nav-btn kx-nav-prev" aria-label="Vídeo anterior">
+          <button type="button" class="kx-nav-btn kx-nav-prev" aria-label="Vídeo anterior" data-i18n-aria-label="portfolio.previous">
             ${KX_ICONS.caretLeft}
           </button>
-          <button type="button" class="kx-nav-btn kx-nav-next" aria-label="Próximo vídeo">
+          <button type="button" class="kx-nav-btn kx-nav-next" aria-label="Próximo vídeo" data-i18n-aria-label="portfolio.next">
             ${KX_ICONS.caretRight}
           </button>
           <div class="kx-perspective-wrapper"></div>
@@ -273,7 +307,7 @@
     const prevBtn = qs(".kx-nav-prev", container);
     const nextBtn = qs(".kx-nav-next", container);
 
-    let activeFilter = "Todos";
+    let activeFilter = null;
     let activeIndex = 0;
     let filteredItems = [...items];
 
@@ -291,21 +325,24 @@
 
     // Categorias únicas
     const rawCategories = items.map((p) => p.category).filter(Boolean);
-    const categories = ["Todos", ...Array.from(new Set(rawCategories))];
+    const categories = [null, ...Array.from(new Set(rawCategories))];
 
     // Renderiza tabs de filtro
     categories.forEach((cat) => {
-      const btn = createEl("button", "kx-filter-tab", cat);
+      const isAll = cat === null;
+      const btn = createEl("button", "kx-filter-tab", isAll ? "Todos" : cat);
       btn.type = "button";
+      btn.dataset.category = isAll ? "" : cat;
+      if (isAll) btn.dataset.i18n = "portfolio.all";
       if (cat === activeFilter) btn.classList.add("is-active");
       btn.addEventListener("click", () => {
         if (activeFilter === cat) return;
         activeFilter = cat;
         qsa(".kx-filter-tab", filterTabsContainer).forEach((t) =>
-          t.classList.toggle("is-active", t.textContent === cat)
+          t.classList.toggle("is-active", t.dataset.category === (isAll ? "" : cat))
         );
         filteredItems =
-          cat === "Todos"
+          isAll
             ? [...items]
             : items.filter((p) => p.category === cat);
         activeIndex = 0;
@@ -840,115 +877,257 @@
     const prevBtn = qs('[data-carousel="prev"]');
     const nextBtn = qs('[data-carousel="next"]');
     const dotsContainer = qs("#carousel-dots");
+    const progress = qs("#testimonials-progress");
+    const viewport = qs("#testimonials-viewport");
 
     if (!track) return;
 
-    testimonials.forEach((testimonial) => {
-      track.appendChild(createTestimonialCard(testimonial));
-    });
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    let index = 0;
+    let group;
+    let cycleDistance = 0;
 
     if (!testimonials.length) {
       if (controls) controls.hidden = true;
+      if (progress) progress.hidden = true;
       return;
     }
 
-    let index = 0;
+    group = createEl("div", "testimonial-group");
+    group.setAttribute("role", "group");
+    group.setAttribute(
+      "aria-label",
+      document.documentElement.lang === "en" ? "Testimonials" : "Depoimentos"
+    );
+    testimonials.forEach((testimonial) => {
+      group.appendChild(createTestimonialCard(testimonial));
+    });
+    track.appendChild(group);
 
-    function getMaxIndex() {
-      return Math.max(0, testimonials.length - 1);
+    const canMove = testimonials.length > 1;
+    track.classList.toggle("is-static", !canMove);
+    track.classList.toggle("is-marquee", canMove && !reducedMotion.matches);
+
+    function cloneGroup(source) {
+      const clone = source.cloneNode(true);
+      clone.dataset.carouselClone = "";
+      clone.setAttribute("aria-hidden", "true");
+      clone.querySelectorAll("img").forEach((img) => img.setAttribute("alt", ""));
+      return clone;
     }
 
-    // Cria as bolinhas de navegação
-    function renderDots() {
-      const max = getMaxIndex();
-      // Se todos os depoimentos cabem na tela, não precisa de controles
-      track.classList.toggle("is-static", max === 0);
-      if (controls) controls.hidden = max === 0;
+    function buildMarquee() {
+      track.querySelectorAll("[data-carousel-clone]").forEach((clone) => clone.remove());
+      if (!canMove || !viewport) return;
 
-      if (!dotsContainer) return;
-      dotsContainer.innerHTML = "";
-      for (let i = 0; i <= max; i++) {
-        const dot = document.createElement("button");
-        dot.type = "button";
-        dot.className = "carousel-dot";
-        dot.setAttribute("aria-label", `Ir para depoimento ${i + 1}`);
-        dot.setAttribute("role", "tab");
-        dot.addEventListener("click", () => {
-          index = i;
-          update();
-        });
-        dotsContainer.appendChild(dot);
+      const groupWidth = group.getBoundingClientRect().width;
+      if (!groupWidth) return;
+      const groupCount = Math.max(
+        1,
+        Math.ceil(viewport.getBoundingClientRect().width / groupWidth)
+      );
+      const cycle = [group];
+      for (let i = 1; i < groupCount; i++) {
+        const clone = cloneGroup(group);
+        track.appendChild(clone);
+        cycle.push(clone);
       }
+      cycleDistance = groupWidth * groupCount;
+      cycle.forEach((source) => track.appendChild(cloneGroup(source)));
     }
 
-    // Move o carrossel pra posição certa
-    function update() {
-      const max = getMaxIndex();
-      index = Math.min(Math.max(index, 0), max);
+    if (canMove) {
+      track.style.setProperty(
+        "--testimonial-marquee-duration",
+        `${Math.max(28, testimonials.length * 7)}s`
+      );
+      buildMarquee();
+    }
 
-      const card = track.querySelector(".testimonial-card");
-      if (!card) return;
+    if (controls) controls.hidden = !canMove;
+    if (progress) {
+      progress.hidden = !canMove;
+      progress.classList.toggle("is-marquee", canMove && !reducedMotion.matches);
+    }
 
-      const cardWidth = card.getBoundingClientRect().width;
-      const gap = parseFloat(getComputedStyle(track).gap) || 20;
-      track.style.transform = index ? `translateX(-${index * (cardWidth + gap)}px)` : "";
-
-      if (prevBtn) prevBtn.disabled = index === 0;
-      if (nextBtn) nextBtn.disabled = index >= max;
+    function setActive(nextIndex) {
+      index = (nextIndex + testimonials.length) % testimonials.length;
+      group.querySelectorAll(".testimonial-card").forEach((card, cardIndex) => {
+        card.classList.toggle("is-active", cardIndex === index);
+      });
 
       if (dotsContainer) {
-        qsa(".carousel-dot", dotsContainer).forEach((dot, i) => {
-          const active = i === index;
+        qsa(".carousel-dot", dotsContainer).forEach((dot, dotIndex) => {
+          const active = dotIndex === index;
           dot.classList.toggle("is-active", active);
           dot.setAttribute("aria-selected", active ? "true" : "false");
         });
       }
+
+      if (prevBtn) prevBtn.disabled = !canMove;
+      if (nextBtn) nextBtn.disabled = !canMove;
     }
 
-    const move = (step) => {
-      index += step;
-      update();
-    };
+    function getAnimation(element) {
+      return element.getAnimations().find((animation) =>
+        animation.effect.getKeyframes().some((frame) => frame.transform)
+      );
+    }
 
-    if (prevBtn) prevBtn.addEventListener("click", () => move(-1));
-    if (nextBtn) nextBtn.addEventListener("click", () => move(1));
+    function seekToCard(nextIndex) {
+      setActive(nextIndex);
+      if (!canMove) return;
 
-    // Navegação por teclado (acessibilidade)
+      if (reducedMotion.matches) {
+        const card = group.children[index];
+        track.style.transform = `translateX(-${card.offsetLeft}px)`;
+        return;
+      }
+
+      const animation = getAnimation(track);
+      const progressAnimation = progress && getAnimation(progress.firstElementChild);
+      const duration = Math.max(28000, testimonials.length * 7000);
+      const offset = group.children[index].offsetLeft;
+      const phase = (offset / cycleDistance) * duration;
+      if (animation) animation.currentTime = phase;
+      if (progressAnimation) progressAnimation.currentTime = phase;
+    }
+
+    if (dotsContainer) {
+      dotsContainer.innerHTML = "";
+      testimonials.forEach((testimonial, dotIndex) => {
+        const dot = document.createElement("button");
+        dot.type = "button";
+        dot.className = "carousel-dot";
+        const label = document.documentElement.lang === "en"
+          ? `Go to testimonial ${dotIndex + 1}`
+          : `Ir para depoimento ${dotIndex + 1}`;
+        dot.setAttribute("aria-label", label);
+        dot.setAttribute("role", "tab");
+        dot.addEventListener("click", () => seekToCard(dotIndex));
+        dotsContainer.appendChild(dot);
+      });
+    }
+
+    if (prevBtn) prevBtn.addEventListener("click", () => seekToCard(index - 1));
+    if (nextBtn) nextBtn.addEventListener("click", () => seekToCard(index + 1));
+
     track.addEventListener("keydown", (e) => {
-      if (e.key === "ArrowLeft") move(-1);
-      else if (e.key === "ArrowRight") move(1);
+      if (e.key === "ArrowLeft") seekToCard(index - 1);
+      else if (e.key === "ArrowRight") seekToCard(index + 1);
     });
 
-    // Recalcula ao redimensionar a tela
+    if (viewport) {
+      let touchStartX = 0;
+      viewport.addEventListener("touchstart", (event) => {
+        touchStartX = event.touches[0].clientX;
+      }, { passive: true });
+      viewport.addEventListener("touchend", (event) => {
+        const delta = event.changedTouches[0].clientX - touchStartX;
+        if (Math.abs(delta) > 40) seekToCard(index + (delta < 0 ? 1 : -1));
+      }, { passive: true });
+    }
+
+    reducedMotion.addEventListener("change", (event) => {
+      track.classList.toggle("is-marquee", canMove && !event.matches);
+      if (progress) progress.classList.toggle("is-marquee", canMove && !event.matches);
+      track.style.removeProperty("transform");
+      requestAnimationFrame(() => seekToCard(index));
+    });
+
     let resizeTimer;
     window.addEventListener("resize", () => {
       clearTimeout(resizeTimer);
-      resizeTimer = setTimeout(() => {
-        renderDots();
-        update();
+      resizeTimer = window.setTimeout(() => {
+        buildMarquee();
+        requestAnimationFrame(() => seekToCard(index));
       }, 150);
     });
 
-    // Arrastar com o dedo no celular
-    let touchStartX = 0;
-    track.addEventListener(
-      "touchstart",
-      (event) => {
-        touchStartX = event.touches[0].clientX;
-      },
-      { passive: true }
-    );
-    track.addEventListener(
-      "touchend",
-      (event) => {
-        const delta = event.changedTouches[0].clientX - touchStartX;
-        if (Math.abs(delta) > 40) move(delta < 0 ? 1 : -1);
-      },
-      { passive: true }
-    );
+    setActive(index);
+    if (canMove && !reducedMotion.matches) {
+      window.setInterval(() => {
+        const animation = getAnimation(track);
+        const duration = Math.max(28000, testimonials.length * 7000);
+        if (!animation || typeof animation.currentTime !== "number") return;
+        const phase = (animation.currentTime % duration) / duration;
+        const groupWidth = group.getBoundingClientRect().width;
+        const position = (phase * cycleDistance) % groupWidth;
+        let closestIndex = 0;
+        let closestDistance = Infinity;
+        Array.from(group.children).forEach((card, cardIndex) => {
+          const distance = Math.abs(card.offsetLeft - position);
+          if (distance < closestDistance) {
+            closestDistance = distance;
+            closestIndex = cardIndex;
+          }
+        });
+        if (closestIndex !== index) setActive(closestIndex);
+      }, 250);
+    }
+  }
 
-    renderDots();
-    update();
+  /* ---------- Perguntas frequentes ---------- */
+  function initFaq() {
+    const list = qs("#faq-list");
+    if (!list) return;
+
+    function render() {
+      const isEnglish = document.documentElement.lang === "en";
+      list.innerHTML = "";
+
+      faqItems.forEach((item, index) => {
+        const copy = isEnglish && item.en ? item.en : item;
+        const questionId = `faq-question-${index}`;
+        const answerId = `faq-answer-${index}`;
+        const entry = createEl("article", "faq-item reveal");
+        const question = createEl("button", "faq-question", copy.q);
+        question.type = "button";
+        question.id = questionId;
+        question.setAttribute("aria-expanded", "false");
+        question.setAttribute("aria-controls", answerId);
+
+        const icon = createEl("span", "faq-icon", "+");
+        icon.setAttribute("aria-hidden", "true");
+        question.appendChild(icon);
+
+        const answer = createEl("div", "faq-answer");
+        answer.id = answerId;
+        answer.setAttribute("role", "region");
+        answer.setAttribute("aria-labelledby", questionId);
+        answer.setAttribute("aria-hidden", "true");
+        const answerInner = createEl("div", "faq-answer-inner");
+        answerInner.appendChild(createEl("p", null, copy.a));
+        answer.appendChild(answerInner);
+
+        entry.append(question, answer);
+        list.appendChild(entry);
+      });
+
+      list.querySelectorAll(".faq-item").forEach((item) => {
+        item.classList.add("is-visible");
+      });
+    }
+
+    list.addEventListener("click", (event) => {
+      const question = event.target.closest(".faq-question");
+      if (!question) return;
+
+      const item = question.closest(".faq-item");
+      const isOpen = question.getAttribute("aria-expanded") === "true";
+      list.querySelectorAll(".faq-question").forEach((button) => {
+        button.setAttribute("aria-expanded", "false");
+        const faqItem = button.closest(".faq-item");
+        faqItem.classList.remove("is-open");
+        faqItem.querySelector(".faq-answer").setAttribute("aria-hidden", "true");
+      });
+      question.setAttribute("aria-expanded", isOpen ? "false" : "true");
+      item.classList.toggle("is-open", !isOpen);
+      item.querySelector(".faq-answer").setAttribute("aria-hidden", String(isOpen));
+    });
+
+    document.addEventListener("dyo:languagechange", render);
+    render();
   }
 
   /* ---------- Contato ---------- */
@@ -978,8 +1157,10 @@
   function init() {
     initNavigation();
     initKxPortfolio();
+    document.dispatchEvent(new CustomEvent("dyo:contentready"));
     initProfileDetails();
     initTestimonials();
+    initFaq();
     initContact();
     initFooter();
     initRevealAnimations();

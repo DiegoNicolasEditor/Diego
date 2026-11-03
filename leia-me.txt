@@ -11,9 +11,12 @@ fazer e siga os passos com calma.
 --------------------------------------------------------
 
 js/content.js
-  Vídeos do portfólio, depoimentos, contatos e informações
-  profissionais. É o arquivo que você vai editar com mais
-  frequência.
+  Vídeos do portfólio, depoimentos, FAQ, contatos e
+  informações profissionais. É o arquivo que você vai
+  editar com mais frequência.
+
+js/i18n.js
+  Textos fixos e traduções para português e inglês.
 
 index.html
   Títulos, parágrafos e textos fixos das seções, incluindo os
@@ -165,8 +168,10 @@ não as substitua por imagens inventadas.
 
 Para remover um depoimento, apague somente o bloco dele.
 
-Com mais de um depoimento, o site mostra um de cada vez em
-um carrossel. Use as setas ou arraste para o lado no celular.
+Com mais de um depoimento, o site mostra os cartões em uma
+faixa horizontal que avança sozinha. Use as setas, os pontos
+ou arraste para o lado no celular. A animação pausa quando
+alguém passa o mouse ou navega pelos controles.
 
 
 5. COMO TROCAR OS LINKS DE CONTATO
@@ -213,7 +218,32 @@ Não publique dados pessoais que você não queira deixar
 públicos na internet.
 
 
-7. COMO TROCAR UMA FOTO
+7. COMO EDITAR O FAQ E OS IDIOMAS
+--------------------------------------------------------
+
+As perguntas e respostas ficam em faq, no arquivo
+js/content.js. Cada item usa q para a pergunta e a para a
+resposta. Para mostrar a tradução em inglês, preencha também
+en:
+
+  {
+    q: "Sua pergunta em português?",
+    a: "Sua resposta em português.",
+    en: {
+      q: "Your question in English?",
+      a: "Your answer in English.",
+    },
+  },
+
+Os textos fixos da página e suas traduções ficam em
+js/i18n.js. Cada texto tem uma versão pt e outra en. O site
+abre em inglês por padrão; use o botão PT | EN no cabeçalho
+para trocar o idioma. A escolha fica salva para as próximas
+visitas. Para adicionar ou editar um texto, mantenha as duas
+versões juntas na mesma chave.
+
+
+8. COMO TROCAR UMA FOTO
 --------------------------------------------------------
 
 Para trocar uma foto mantendo o mesmo uso no site, envie a nova
@@ -227,15 +257,15 @@ Imagem guardada da seção "Sobre": img/sections/
 Fundo do contato: img/backgrounds/
 Imagem de compartilhamento: img/social/
 
-ATENÇÃO: a seção "Sobre" atualmente mostra "Em breve". Trocar
-img/sections/about.webp, sozinha, não muda o que aparece nessa
-seção. Não apague a imagem: ela está guardada para uso futuro.
+ATENÇÃO: img/brand/foto-dyo.webp é uma foto real da marca, mas
+ela não é exibida na seção "Sobre" atualmente. Não apague nem
+substitua essa foto por uma imagem gerada.
 
 Não apague foto, logo ou ícone sem saber onde ele é usado.
 Mantenha uma cópia da imagem antiga antes de substituí-la.
 
 
-8. COMO MUDAR AS CORES
+9. COMO MUDAR AS CORES
 --------------------------------------------------------
 
 As cores e tamanhos principais ficam em css/variables.css.
@@ -244,7 +274,7 @@ as seções claras e escuras. Não coloque cores diretamente nos
 arquivos css/sections/: o site usa variáveis compartilhadas.
 
 
-9. REGRAS PARA NÃO QUEBRAR O SITE
+10. REGRAS PARA NÃO QUEBRAR O SITE
 --------------------------------------------------------
 
 - Edite só o que precisa; não apague linhas que não entende.
