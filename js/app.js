@@ -20,6 +20,25 @@
   const contactLinks = content.contactLinks || {};
   const faqItems = content.faq || [];
 
+  function currentLanguage() {
+    return document.documentElement.lang === "en" ? "en" : "pt";
+  }
+
+  function translated(key) {
+    return window.DYO_I18N?.[key]?.[currentLanguage()] || key;
+  }
+
+  function categoryLabelFor(item) {
+    if (!item) return "";
+    return currentLanguage() === "en" ? (item.categoryEn || item.category || "") : (item.category || "");
+  }
+
+  function setPlayerLabel(element, key) {
+    if (!element) return;
+    element.dataset.i18nAriaLabel = key;
+    element.setAttribute("aria-label", translated(key));
+  }
+
   /* ---------- Funções auxiliares ---------- */
   const qs = (selector, scope = document) => scope.querySelector(selector);
   const qsa = (selector, scope = document) =>
@@ -162,7 +181,7 @@
         element.classList.add("reveal", "reveal-pending");
         element.style.setProperty(
           "--reveal-delay",
-          `${Math.min(index, 4) * 90}ms`
+          `${Math.min(index, 4) * 60}ms`
         );
         element.addEventListener("transitionend", (event) => {
           if (event.target === element) {
@@ -256,11 +275,57 @@
     return `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
   }
 
+  const projectThumbnailCache = new Map();
+
+  function getProjectThumbnailCandidates(item) {
+    if (item.thumbnail) return [item.thumbnail];
+    if (item.poster) return [item.poster];
+    if (item.youtubeId) {
+      const videoId = encodeURIComponent(item.youtubeId);
+      return ["maxresdefault", "hq720", "sddefault", "hqdefault"].map(
+        (size) => `https://i.ytimg.com/vi/${videoId}/${size}.jpg`
+      );
+    }
+    return [];
+  }
+
   function getProjectThumbnail(item) {
-    if (item.thumbnail) return item.thumbnail;
-    if (item.poster) return item.poster;
-    if (item.youtubeId) return `https://i.ytimg.com/vi/${encodeURIComponent(item.youtubeId)}/hqdefault.jpg`;
-    return "";
+    return getProjectThumbnailCandidates(item)[0] || "";
+  }
+
+  function resolveProjectThumbnail(item) {
+    const candidates = getProjectThumbnailCandidates(item);
+    if (!candidates.length) return Promise.resolve("");
+    const cacheKey = item.youtubeId || candidates[0];
+    if (projectThumbnailCache.has(cacheKey)) return projectThumbnailCache.get(cacheKey);
+
+    const resolved = new Promise((resolve) => {
+      const probe = new Image();
+      let index = 0;
+      const tryNext = () => {
+        const source = candidates[index];
+        probe.onload = () => {
+          if (probe.naturalWidth >= 640 || index === candidates.length - 1) {
+            resolve(source);
+            return;
+          }
+          index += 1;
+          tryNext();
+        };
+        probe.onerror = () => {
+          if (index === candidates.length - 1) {
+            resolve(source);
+            return;
+          }
+          index += 1;
+          tryNext();
+        };
+        probe.src = source;
+      };
+      tryNext();
+    });
+    projectThumbnailCache.set(cacheKey, resolved);
+    return resolved;
   }
 
   /* ---------- Motor do Player 3D Estilo kxeditor ---------- */
@@ -286,7 +351,7 @@
           <h2 class="kx-player-title" data-i18n="${playerType === "short" ? "portfolio.short.title" : "portfolio.long.title"}">${title}</h2>
           <p class="kx-player-desc" data-i18n="${playerType === "short" ? "portfolio.short.description" : "portfolio.long.description"}">${description}</p>
         </div>
-        <div class="kx-filter-tabs" role="tablist"></div>
+        <div class="kx-filter-tabs" role="group" aria-label="Filtros do portfólio" data-i18n-aria-label="portfolio.filters"></div>
         <div class="kx-carousel-stage" tabindex="0">
           <button type="button" class="kx-nav-btn kx-nav-prev" aria-label="Vídeo anterior" data-i18n-aria-label="portfolio.previous">
             ${KX_ICONS.caretLeft}
@@ -304,11 +369,14 @@
     const stage = qs(".kx-carousel-stage", container);
     const perspectiveWrapper = qs(".kx-perspective-wrapper", container);
     const paginationContainer = qs(".kx-pagination", container);
+    const paginationIndicator = createEl("span", "kx-pagination-indicator");
+    paginationIndicator.setAttribute("aria-hidden", "true");
     const prevBtn = qs(".kx-nav-prev", container);
     const nextBtn = qs(".kx-nav-next", container);
 
     let activeFilter = null;
     let activeIndex = 0;
+    let incomingDirection = 0;
     let filteredItems = [...items];
 
     // Estados de reprodução
@@ -318,6 +386,7 @@
     let duration = 0;
     let currentTime = 0;
     let hideControlsTimer = null;
+    const hoverControls = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
     let isDraggingProgress = false;
     let isHoveringVolume = false;
     let activeVideoEl = null;
@@ -330,26 +399,54 @@
     // Renderiza tabs de filtro
     categories.forEach((cat) => {
       const isAll = cat === null;
-      const btn = createEl("button", "kx-filter-tab", isAll ? "Todos" : cat);
+      const itemForCategory = items.find((item) => item.category === cat);
+      const categoryLabel = itemForCategory && currentLanguage() === "en"
+        ? (itemForCategory.categoryEn || cat)
+        : cat;
+      const btn = createEl("button", "kx-filter-tab", isAll ? translated("portfolio.all") : categoryLabel);
       btn.type = "button";
       btn.dataset.category = isAll ? "" : cat;
+      btn.setAttribute("aria-pressed", String(cat === activeFilter));
       if (isAll) btn.dataset.i18n = "portfolio.all";
       if (cat === activeFilter) btn.classList.add("is-active");
       btn.addEventListener("click", () => {
         if (activeFilter === cat) return;
         activeFilter = cat;
-        qsa(".kx-filter-tab", filterTabsContainer).forEach((t) =>
-          t.classList.toggle("is-active", t.dataset.category === (isAll ? "" : cat))
-        );
+        qsa(".kx-filter-tab", filterTabsContainer).forEach((t) => {
+          const selected = t.dataset.category === (isAll ? "" : cat);
+          t.classList.toggle("is-active", selected);
+          t.setAttribute("aria-pressed", String(selected));
+        });
         filteredItems =
           isAll
             ? [...items]
             : items.filter((p) => p.category === cat);
         activeIndex = 0;
+        incomingDirection = 0;
         resetPlayback();
         render();
       });
       filterTabsContainer.appendChild(btn);
+    });
+
+    document.addEventListener("dyo:languagechange", () => {
+      qsa(".kx-filter-tab", filterTabsContainer).forEach((btn) => {
+        const category = btn.dataset.category;
+        if (!category) {
+          btn.textContent = translated("portfolio.all");
+          btn.dataset.i18n = "portfolio.all";
+          return;
+        }
+        delete btn.dataset.i18n;
+        const item = items.find((project) => project.category === category);
+        btn.textContent = categoryLabelFor(item);
+      });
+      qsa(".kx-side-cat", container).forEach((label) => {
+        const item = items.find((project) => project.category === label.dataset.category);
+        label.textContent = categoryLabelFor(item);
+      });
+      const activeCategory = qs(".kx-controls-cat", container);
+      if (activeCategory) activeCategory.textContent = categoryLabelFor(filteredItems[activeIndex]);
     });
 
     function resetPlayback() {
@@ -371,6 +468,19 @@
     function scheduleControlsHide(controlsBar) {
       clearTimeout(hideControlsTimer);
       if (!controlsBar) return;
+
+      if (hoverControls) {
+        const card = controlsBar.closest(".kx-main-card");
+        const show = isPlaying && (card?.matches(":hover") || card?.matches(":focus-within"));
+        controlsBar.classList.toggle("is-hidden", !show);
+        return;
+      }
+
+      if (!isPlaying) {
+        controlsBar.classList.add("is-hidden");
+        return;
+      }
+
       controlsBar.classList.remove("is-hidden");
       if (isPlaying && !isDraggingProgress && !isHoveringVolume) {
         hideControlsTimer = setTimeout(() => {
@@ -382,7 +492,7 @@
     function createSideCard(item, positionClass, direction) {
       const card = createEl("button", `kx-side-card ${positionClass}`);
       card.type = "button";
-      card.setAttribute("aria-label", `${item.title} — ${item.category || ""}`);
+      card.setAttribute("aria-label", `${item.title} — ${categoryLabelFor(item)}`);
 
       const thumbUrl = getProjectThumbnail(item);
       const isLeft = positionClass.includes("left");
@@ -397,42 +507,80 @@
         </div>
         <div class="kx-side-caption">
           <p class="kx-side-title">${item.title}</p>
-          <span class="kx-side-cat">${item.category || ""}</span>
+          <span class="kx-side-cat" data-category="${item.category || ""}">${categoryLabelFor(item)}</span>
         </div>
       `;
 
-      card.addEventListener("click", () => {
-        slideTo(direction);
+      resolveProjectThumbnail(item).then((source) => {
+        const thumbnail = qs(".kx-side-thumb", card);
+        if (source && thumbnail?.isConnected) thumbnail.src = source;
+      });
+
+      card.addEventListener("click", (event) => {
+        slideTo(direction, event.detail === 0);
       });
 
       return card;
     }
 
-    function slideTo(direction) {
+    function slideTo(direction, restoreStageFocus = false) {
       resetPlayback();
       const count = filteredItems.length;
       activeIndex = (activeIndex + direction + count) % count;
+      incomingDirection = Math.sign(direction);
       render();
+      if (restoreStageFocus) stage.focus({ preventScroll: true });
     }
 
     function renderPagination() {
-      paginationContainer.replaceChildren();
+      const restorePaginationFocus = paginationContainer.contains(document.activeElement);
+      const currentDots = qsa(".kx-dot", paginationContainer);
+      const needsRebuild = currentDots.length !== filteredItems.length || currentDots.some((dot, idx) =>
+        dot.dataset.videoKey !== String(filteredItems[idx]?.youtubeId || filteredItems[idx]?.video || filteredItems[idx]?.title || "")
+      );
       paginationContainer.style.display = filteredItems.length > 1 ? "flex" : "none";
       if (prevBtn) prevBtn.style.display = filteredItems.length > 1 ? "flex" : "none";
       if (nextBtn) nextBtn.style.display = filteredItems.length > 1 ? "flex" : "none";
 
-      filteredItems.forEach((item, idx) => {
-        const dot = createEl("button", "kx-dot");
-        dot.type = "button";
-        dot.setAttribute("aria-label", `Ir para vídeo ${idx + 1}: ${item.title}`);
-        if (idx === activeIndex) dot.classList.add("is-active");
-        dot.addEventListener("click", () => {
-          if (idx === activeIndex) return;
-          const diff = idx - activeIndex;
-          slideTo(diff);
+      if (!paginationIndicator.isConnected) paginationContainer.appendChild(paginationIndicator);
+
+      if (needsRebuild) {
+        currentDots.forEach((dot) => dot.remove());
+        filteredItems.forEach((item, idx) => {
+          const dot = createEl("button", "kx-dot");
+          dot.type = "button";
+          dot.dataset.videoKey = String(item.youtubeId || item.video || item.title || "");
+          dot.addEventListener("click", () => {
+            const targetIndex = Number(dot.dataset.index);
+            if (targetIndex === activeIndex) return;
+            slideTo(targetIndex - activeIndex);
+          });
+          paginationContainer.insertBefore(dot, paginationIndicator);
         });
-        paginationContainer.appendChild(dot);
+      }
+
+      filteredItems.forEach((item, idx) => {
+        const dot = qsa(".kx-dot", paginationContainer)[idx];
+        const selected = idx === activeIndex;
+        dot.dataset.index = String(idx);
+        dot.setAttribute(
+          "aria-label",
+          currentLanguage() === "en"
+            ? `Go to video ${idx + 1}: ${item.title}`
+            : `Ir para vídeo ${idx + 1}: ${item.title}`
+        );
+        dot.setAttribute("aria-pressed", String(selected));
+        dot.classList.toggle("is-active", selected);
       });
+
+      const activeDot = qs(".kx-dot.is-active", paginationContainer);
+      if (activeDot) {
+        const indicatorX = activeDot.offsetLeft + activeDot.offsetWidth / 2 - 12;
+        paginationIndicator.style.setProperty("--indicator-x", `${indicatorX}px`);
+      }
+      if (restorePaginationFocus) {
+        qs(".kx-dot.is-active", paginationContainer)?.focus({ preventScroll: true });
+      }
     }
 
     function render() {
@@ -467,40 +615,44 @@
 
       // Card Principal do Centro
       const mainCard = createEl("div", "kx-main-card");
+      if (incomingDirection) {
+        mainCard.classList.add("is-entering");
+        mainCard.style.setProperty("--slide-direction", incomingDirection > 0 ? "1" : "-1");
+      }
       mainCard.innerHTML = `
         <video class="kx-main-video" poster="${thumbUrl}" playsinline preload="metadata" loop></video>
         <div class="kx-play-center">
-          <button type="button" class="kx-play-center-btn" aria-label="Reproduzir vídeo">
+          <button type="button" class="kx-play-center-btn" aria-label="Reproduzir" data-i18n-aria-label="player.play">
             ${KX_ICONS.play}
           </button>
         </div>
-        <div class="kx-controls-bar">
+        <div class="kx-controls-bar is-hidden">
           <div class="kx-controls-top">
             <div class="kx-controls-title-info">
               <p class="kx-controls-title">${currentItem.title}</p>
-              <span class="kx-controls-cat">${currentItem.category || ""}</span>
+            <span class="kx-controls-cat">${categoryLabelFor(currentItem)}</span>
             </div>
             <div class="kx-controls-time">00:00 / 00:00</div>
           </div>
           <div class="kx-progress-box">
-            <input type="range" class="kx-progress-range" min="0" max="100" step="0.1" value="0" aria-label="Progresso do vídeo" />
+            <input type="range" class="kx-progress-range" min="0" max="100" step="0.1" value="0" aria-label="Progresso do vídeo" data-i18n-aria-label="player.progress" />
           </div>
           <div class="kx-controls-bottom">
             <div class="kx-controls-left">
-              <button type="button" class="kx-ctrl-btn kx-play-btn" aria-label="Reproduzir">
+              <button type="button" class="kx-ctrl-btn kx-play-btn" aria-label="Reproduzir" data-i18n-aria-label="player.play">
                 ${KX_ICONS.play}
               </button>
               <div class="kx-volume-box">
-                <button type="button" class="kx-ctrl-btn kx-vol-btn" aria-label="Silenciar">
+                <button type="button" class="kx-ctrl-btn kx-vol-btn" aria-label="Silenciar" data-i18n-aria-label="player.mute">
                   ${KX_ICONS.volumeHigh}
                 </button>
                 <div class="kx-volume-popup">
-                  <input type="range" class="kx-volume-range" min="0" max="1" step="0.05" value="${volume}" aria-label="Volume" />
+                  <input type="range" class="kx-volume-range" min="0" max="1" step="0.05" value="${volume}" aria-label="Volume" data-i18n-aria-label="player.volume" />
                 </div>
               </div>
             </div>
             <div class="kx-controls-right">
-              <button type="button" class="kx-ctrl-btn kx-fullscreen-btn" aria-label="Tela cheia">
+              <button type="button" class="kx-ctrl-btn kx-fullscreen-btn" aria-label="Tela cheia" data-i18n-aria-label="player.fullscreen">
                 ${KX_ICONS.fullscreen}
               </button>
             </div>
@@ -522,6 +674,10 @@
 
       activeVideoEl = video;
 
+      resolveProjectThumbnail(currentItem).then((source) => {
+        if (source && video.isConnected) video.poster = source;
+      });
+
       const hasDirectVideo = Boolean(currentItem.video);
 
       if (hasDirectVideo) {
@@ -533,13 +689,13 @@
       function updateVolIcon() {
         if (isMuted || volume === 0) {
           volBtn.innerHTML = KX_ICONS.volumeMute;
-          volBtn.setAttribute("aria-label", "Ativar som");
+          setPlayerLabel(volBtn, "player.unmute");
         } else if (volume < 0.5) {
           volBtn.innerHTML = KX_ICONS.volumeLow;
-          volBtn.setAttribute("aria-label", "Silenciar");
+          setPlayerLabel(volBtn, "player.mute");
         } else {
           volBtn.innerHTML = KX_ICONS.volumeHigh;
-          volBtn.setAttribute("aria-label", "Silenciar");
+          setPlayerLabel(volBtn, "player.mute");
         }
       }
 
@@ -548,11 +704,13 @@
         if (playing) {
           playCenter.classList.add("is-hidden");
           playBtn.innerHTML = KX_ICONS.pause;
-          playBtn.setAttribute("aria-label", "Pausar");
+          setPlayerLabel(playBtn, "player.pause");
+          setPlayerLabel(playCenterBtn, "player.pause");
         } else {
           playCenter.classList.remove("is-hidden");
           playBtn.innerHTML = KX_ICONS.play;
-          playBtn.setAttribute("aria-label", "Reproduzir");
+          setPlayerLabel(playBtn, "player.play");
+          setPlayerLabel(playCenterBtn, "player.play");
         }
         scheduleControlsHide(controlsBar);
       }
@@ -573,6 +731,13 @@
             video.pause();
             updatePlayState(false);
           }
+        } else if (activeIframeEl) {
+          const command = isPlaying ? "pauseVideo" : "playVideo";
+          activeIframeEl.contentWindow?.postMessage(
+            JSON.stringify({ event: "command", func: command, args: [] }),
+            "*"
+          );
+          updatePlayState(!isPlaying);
         } else if (currentItem.youtubeId) {
           // Incorpora o YouTube dentro do próprio frame do player
           if (!activeIframeEl) {
@@ -580,7 +745,7 @@
             iframe.className = "kx-main-iframe";
             iframe.src = `https://www.youtube.com/embed/${encodeURIComponent(
               currentItem.youtubeId
-            )}?autoplay=1&playsinline=1&rel=0&modestbranding=1&enablejsapi=1`;
+            )}?autoplay=1&controls=0&playsinline=1&rel=0&modestbranding=1&enablejsapi=1&iv_load_policy=3`;
             iframe.title = currentItem.title;
             iframe.referrerPolicy = "strict-origin-when-cross-origin";
             iframe.allow =
@@ -589,9 +754,7 @@
             mainCard.prepend(iframe);
             activeIframeEl = iframe;
             video.style.display = "none";
-            playCenter.classList.add("is-hidden");
-            controlsBar.classList.add("is-hidden");
-            isPlaying = true;
+            updatePlayState(true);
           }
         }
       }
@@ -630,6 +793,7 @@
 
         playBtn.addEventListener("click", (e) => {
           e.stopPropagation();
+          if (e.detail > 0) playBtn.blur();
           togglePlay();
         });
 
@@ -697,6 +861,7 @@
 
       playCenterBtn.addEventListener("click", (e) => {
         e.stopPropagation();
+        if (e.detail > 0) playCenterBtn.blur();
         togglePlay();
       });
 
@@ -707,12 +872,16 @@
       mainCard.addEventListener("mousemove", () => scheduleControlsHide(controlsBar));
       mainCard.addEventListener("mouseenter", () => scheduleControlsHide(controlsBar));
       mainCard.addEventListener("mouseleave", () => {
-        if (isPlaying && !isDraggingProgress && !isHoveringVolume) {
+        if (isPlaying && !isDraggingProgress && !isHoveringVolume && !mainCard.matches(":focus-within")) {
           controlsBar.classList.add("is-hidden");
         }
       });
+      mainCard.addEventListener("focusin", () => scheduleControlsHide(controlsBar));
+      mainCard.addEventListener("focusout", () => requestAnimationFrame(() => scheduleControlsHide(controlsBar)));
 
       perspectiveWrapper.appendChild(mainCard);
+      if (incomingDirection) requestAnimationFrame(() => mainCard.classList.remove("is-entering"));
+      incomingDirection = 0;
 
       // Card Near Right (se houver 2 ou mais)
       if (total >= 2) {
@@ -755,25 +924,40 @@
       }
     });
 
-    // Touch / Swipe
-    let touchStartX = 0;
+    // Deslize horizontal sem capturar toques em controles nem scroll vertical.
+    let touchStart = null;
     stage.addEventListener(
       "touchstart",
       (e) => {
-        touchStartX = e.touches[0].clientX;
+        if (e.touches.length !== 1 || e.target.closest("button, input, select, textarea")) {
+          touchStart = null;
+          return;
+        }
+        touchStart = {
+          x: e.touches[0].clientX,
+          y: e.touches[0].clientY,
+        };
       },
       { passive: true }
     );
     stage.addEventListener(
       "touchend",
       (e) => {
-        const delta = e.changedTouches[0].clientX - touchStartX;
-        if (Math.abs(delta) > 40) {
-          slideTo(delta < 0 ? 1 : -1);
+        if (!touchStart) return;
+        if (e.changedTouches.length !== 1) {
+          touchStart = null;
+          return;
+        }
+        const deltaX = e.changedTouches[0].clientX - touchStart.x;
+        const deltaY = e.changedTouches[0].clientY - touchStart.y;
+        touchStart = null;
+        if (Math.abs(deltaX) >= 48 && Math.abs(deltaX) > Math.abs(deltaY) * 1.25) {
+          slideTo(deltaX < 0 ? 1 : -1);
         }
       },
       { passive: true }
     );
+    stage.addEventListener("touchcancel", () => { touchStart = null; }, { passive: true });
 
     // Auto-pausa quando rolar para fora da tela (IntersectionObserver)
     if ("IntersectionObserver" in window) {
@@ -835,7 +1019,18 @@
   function createTestimonialCard(testimonial) {
     const article = createEl("article", "testimonial-card");
 
-    article.appendChild(createEl("p", "testimonial-quote", testimonial.quote));
+    const rating = Math.max(1, Math.min(5, Number.parseInt(testimonial.rating, 10) || 5));
+    const stars = createEl("div", "testimonial-rating");
+    stars.setAttribute("role", "img");
+    stars.dataset.rating = String(rating);
+    stars.setAttribute("aria-label", currentLanguage() === "en" ? `${rating} out of 5 stars` : `${rating} de 5 estrelas`);
+    stars.innerHTML = Array.from({ length: 5 }, (_, index) => `<span aria-hidden="true" class="${index < rating ? "is-filled" : ""}">★</span>`).join("");
+    article.appendChild(stars);
+
+    const quote = createEl("p", "testimonial-quote", currentLanguage() === "en" ? (testimonial.quoteEn || testimonial.quote) : testimonial.quote);
+    quote.dataset.quotePt = testimonial.quote;
+    quote.dataset.quoteEn = testimonial.quoteEn || testimonial.quote;
+    article.appendChild(quote);
 
     const author = createEl("div", "testimonial-author");
     const avatar = createEl("div", "testimonial-avatar");
@@ -843,7 +1038,7 @@
     if (testimonial.avatar) {
       const img = document.createElement("img");
       img.src = testimonial.avatar;
-      img.alt = `Foto de ${testimonial.name}`;
+      img.alt = currentLanguage() === "en" ? `Photo of ${testimonial.name}` : `Foto de ${testimonial.name}`;
       img.width = 48;
       img.height = 48;
       img.loading = "lazy";
@@ -860,8 +1055,9 @@
 
     const info = createEl("div", "testimonial-author-info");
     info.appendChild(createEl("span", "testimonial-name", testimonial.name));
-    if (testimonial.handle) {
-      info.appendChild(createEl("span", "testimonial-handle", testimonial.handle));
+    const attribution = testimonial.role || testimonial.company || testimonial.handle;
+    if (attribution) {
+      info.appendChild(createEl("span", "testimonial-handle", attribution));
     }
 
     author.appendChild(avatar);
@@ -904,6 +1100,19 @@
     });
     track.appendChild(group);
 
+    document.addEventListener("dyo:languagechange", (event) => {
+      const english = event.detail?.lang === "en";
+      group.setAttribute("aria-label", english ? "Testimonials" : "Depoimentos");
+      qsa(".testimonial-card", track).forEach((card) => {
+        const quote = qs(".testimonial-quote", card);
+        const stars = qs(".testimonial-rating", card);
+        const image = qs(".testimonial-avatar img", card);
+        if (quote) quote.textContent = english ? quote.dataset.quoteEn : quote.dataset.quotePt;
+        if (stars) stars.setAttribute("aria-label", english ? `${stars.dataset.rating} out of 5 stars` : `${stars.dataset.rating} de 5 estrelas`);
+        if (image) image.alt = english ? `Photo of ${qs(".testimonial-name", card)?.textContent || "client"}` : `Foto de ${qs(".testimonial-name", card)?.textContent || "cliente"}`;
+      });
+    });
+
     const canMove = testimonials.length > 1;
     track.classList.toggle("is-static", !canMove);
     track.classList.toggle("is-marquee", canMove && !reducedMotion.matches);
@@ -942,6 +1151,15 @@
         `${Math.max(28, testimonials.length * 7)}s`
       );
       buildMarquee();
+    }
+
+    if (canMove && viewport && "IntersectionObserver" in window) {
+      const marqueeObserver = new IntersectionObserver(([entry]) => {
+        const paused = !entry.isIntersecting;
+        track.classList.toggle("is-paused", paused);
+        if (progress) progress.classList.toggle("is-paused", paused);
+      }, { threshold: 0 });
+      marqueeObserver.observe(viewport);
     }
 
     if (controls) controls.hidden = !canMove;
@@ -1144,6 +1362,35 @@
         el.setAttribute("target", "_blank");
         el.setAttribute("rel", "noopener noreferrer");
       }
+    });
+
+    qsa("[data-copy-value]").forEach((button) => {
+      const label = button.querySelector("[data-copy-label]") || button;
+      let timer;
+      button.addEventListener("click", async () => {
+        const value = button.dataset.copyValue;
+        try {
+          if (navigator.clipboard?.writeText) {
+            await navigator.clipboard.writeText(value);
+          } else {
+            const input = document.createElement("textarea");
+            input.value = value;
+            input.style.position = "fixed";
+            input.style.opacity = "0";
+            document.body.appendChild(input);
+            input.select();
+            document.execCommand("copy");
+            input.remove();
+          }
+          label.textContent = translated("contact.copied");
+          clearTimeout(timer);
+          timer = setTimeout(() => { label.textContent = translated("contact.copy"); }, 1600);
+        } catch (_) {
+          label.textContent = translated("contact.copy.error");
+          clearTimeout(timer);
+          timer = setTimeout(() => { label.textContent = translated("contact.copy"); }, 1600);
+        }
+      });
     });
   }
 

@@ -86,6 +86,7 @@ dados. Exemplo:
       title: "Nome do meu vídeo",
       youtubeId: "ID_DO_VIDEO",
       category: "Vídeo",
+      categoryEn: "Video",
       type: "video",
       format: "horizontal",
     },
@@ -102,29 +103,31 @@ o endereço inteiro: use somente o ID.
 
 Escolha o tipo e o formato:
 
-  VÃ­deo vertical (Shorts / Reels / TikTok):
+  Vídeo vertical (Shorts / Reels / TikTok):
     type: "short"
     format: "vertical"
 
-  VÃ­deo horizontal (VÃ­deos Longos / YouTube):
+  Vídeo horizontal (Vídeos Longos / YouTube):
     type: "video"
     format: "horizontal"
 
-VocÃª pode usar vÃ­deos do YouTube atravÃ©s do youtubeId:
+Você pode usar vídeos do YouTube através do youtubeId:
   youtubeId: "ID_DO_VIDEO"
 
 Ou arquivos diretos de vÃ­deo (MP4 ou WebM):
   video: "caminho-ou-link-do-video.mp4"
   thumbnail: "caminho-ou-link-da-capa.jpg"
 
-O texto de category Ã© a categoria do vÃ­deo (ex.: "Publicidade",
-"Gameplay", "Review"). Ela aparece nos botÃµes de filtro no topo do
-player e na legenda do vÃ­deo.
+O texto de category é a categoria do vídeo (ex.: "Publicidade",
+"Gameplay", "Review"). Ela aparece nos botões de filtro no topo do
+player e na legenda do vídeo. Se quiser mostrar a categoria em inglês,
+preencha também categoryEn. Esse campo é opcional; sem ele, o site usa
+o texto de category nos dois idiomas.
 
 Os players funcionam com efeito 3D (estilo kxeditor):
-- Os vÃ­deos tocam diretamente na pÃ¡gina com controles modernos de
-  reproduÃ§Ã£o, progresso, volume e tela cheia.
-- Navegue entre os projetos pelas setas laterais, clicando nos cartÃµes
+- Os vídeos tocam diretamente na página com controles de
+  reprodução, progresso, volume e tela cheia.
+- Navegue entre os projetos pelas setas laterais, clicando nos cartões
   vizinhos, pelos pontos na parte inferior ou deslizando no celular.
 Para deixar um projeto antes dos outros, acrescente, por
 exemplo, priority: 2, antes do fechamento }. Um número maior
@@ -151,11 +154,17 @@ Cada depoimento usa estes campos:
     {
       name: "Nome do cliente",
       handle: "@usuario",
+      role: "Profissão ou empresa (opcional)",
+      rating: 5,
       quote: "Texto autorizado pelo cliente.",
       avatar: "img/testimonials/nome-da-foto.webp",
     },
 
-Troque o nome, o usuário e a frase. O handle é opcional; se
+Troque o nome, o usuário e a frase. Escolha rating entre 1 e 5;
+as estrelas do cartão acompanham essa nota. Inclua role para mostrar
+a profissão/empresa no lugar do usuário. Use quoteEn para definir
+uma tradução em inglês. Se deixar vazio ou não incluir, a frase em
+português será usada nos dois idiomas. O handle é opcional; se
 não quiser mostrar um, use handle: "".
 
 Para usar uma foto, envie o arquivo para img/testimonials/ e
@@ -237,7 +246,7 @@ en:
 
 Os textos fixos da página e suas traduções ficam em
 js/i18n.js. Cada texto tem uma versão pt e outra en. O site
-abre em inglês por padrão; use o botão PT | EN no cabeçalho
+abre em português por padrão; use o botão PT | EN no cabeçalho
 para trocar o idioma. A escolha fica salva para as próximas
 visitas. Para adicionar ou editar um texto, mantenha as duas
 versões juntas na mesma chave.

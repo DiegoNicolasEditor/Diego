@@ -35,6 +35,7 @@ window.SITE_CONTENT = {
       title: "Tutorial de dribles",
       youtubeId: "gAlBlcIFumM",
       category: "Tutorial",
+      categoryEn: "Tutorial",
       type: "short",
       format: "vertical",
     },
@@ -42,6 +43,7 @@ window.SITE_CONTENT = {
       title: "Comer bem faz diferença? - profissionais",
       youtubeId: "kkN-d-8E-0E",
       category: "Conteúdo profissional",
+      categoryEn: "Professional content",
       type: "short",
       format: "vertical",
     },
@@ -49,6 +51,7 @@ window.SITE_CONTENT = {
       title: "5 melhores monitores - publicidades",
       youtubeId: "g8xepPKiihs",
       category: "Publicidade",
+      categoryEn: "Advertising",
       type: "short",
       format: "vertical",
     },
@@ -58,6 +61,7 @@ window.SITE_CONTENT = {
       title: "Mundo eterno - Minecraft",
       youtubeId: "QWExYEmhqRM",
       category: "Gameplay",
+      categoryEn: "Gameplay",
       type: "video",
       format: "horizontal",
     },
@@ -69,12 +73,15 @@ window.SITE_CONTENT = {
      avatar → caminho da foto (coloque o arquivo em
               img/testimonials/). Se deixar vazio (""), o site
               mostra um círculo neutro com as iniciais.
+     rating → nota inteira de 1 a 5; as estrelas acompanham o valor.
      ========================================================= */
   testimonials: [
     {
       name: "Lagu",
       handle: "@LaguBR",
+      rating: 5,
       quote: "Meu Deus, que qualidade boa! Você é profissional. Valeu todo o tempo de espera.",
+      quoteEn: "Oh my God, the quality is so good! You're a professional. It was well worth the wait.",
       avatar: "img/testimonials/lagu.webp",
     },
   ],
@@ -102,42 +109,42 @@ window.SITE_CONTENT = {
   faq: [
     {
       q: "Quanto tempo leva para editar um vídeo?",
-      a: "Shorts levam de 5 a 10 horas para editar, podendo levar mais tempo dependendo da dificuldade. Vídeos longos levam de 1 a 2 dias, também dependendo da dificuldade. Em projetos urgentes, posso acelerar — é só me avisar!",
+      a: "Em geral, levo de 5 a 10 horas para editar um Short. Projetos mais complexos podem levar mais tempo. Vídeos longos levam de 1 a 2 dias, dependendo do projeto. Se tiver urgência, me avisa e vejo se consigo adiantar.",
       en: {
         q: "How long does it take to edit a video?",
-        a: "Shorts take 5 to 10 hours to edit and may take longer depending on the complexity. Long-form videos take 1 to 2 days, also depending on the complexity. For urgent projects, I may be able to speed things up — just let me know!",
+          a: "Shorts usually take me 5 to 10 hours to edit. More complex projects can take longer. Long-form videos take 1 to 2 days, depending on the project. If you're in a hurry, let me know and I'll see if I can move things along.",
       },
     },
     {
       q: "Quais programas você usa?",
-      a: "Trabalho principalmente com Adobe Premiere Pro, After Effects e CapCut. Posso adaptar o fluxo conforme a necessidade do projeto.",
+      a: "Uso principalmente Premiere Pro, After Effects e CapCut. Escolho as ferramentas conforme o que cada projeto precisa.",
       en: {
         q: "What software do you use?",
-        a: "I mainly use Adobe Premiere Pro, After Effects, and CapCut. I can adapt my workflow to your project's needs.",
+          a: "I mainly use Premiere Pro, After Effects, and CapCut. I choose the tools based on what each project needs.",
       },
     },
     {
       q: "Você edita Shorts e vídeos longos?",
-      a: "Sim! Edito os dois formatos. Tenho experiência com Shorts/Reels/TikToks verticais e também com vídeos horizontais para YouTube.",
+      a: "Edito os dois formatos: Shorts, Reels e TikToks verticais, além de vídeos horizontais para YouTube.",
       en: {
         q: "Do you edit Shorts and long videos?",
-        a: "Yes! I edit both formats. I have experience with vertical Shorts/Reels/TikToks and horizontal YouTube videos.",
+          a: "I edit both formats: vertical Shorts, Reels, and TikToks, as well as horizontal videos for YouTube.",
       },
     },
     {
       q: "Como funciona o pagamento?",
-      a: "Combinamos os detalhes pelo WhatsApp ou Discord antes de começar. Aceito Pix, e os valores variam de acordo com a complexidade do projeto.",
+      a: "Antes de começar, combinamos os detalhes pelo WhatsApp ou Discord. Aceito Pix, e o valor depende da complexidade do projeto.",
       en: {
         q: "How does payment work?",
-        a: "We sort out the details on WhatsApp or Discord before starting. I accept Pix, and prices vary based on project complexity.",
+          a: "Before we start, we sort out the details on WhatsApp or Discord. I accept Pix, and the price depends on the project's complexity.",
       },
     },
     {
       q: "Aceita revisões após entregar?",
-      a: "Sim! Todos os planos e pacotes incluem 3 revisões. Se precisar de algum ajuste, é só falar — fico feliz em deixar o vídeo do jeito que você imaginou.",
+      a: "Todos os planos e pacotes incluem 3 revisões. Se precisar de algum ajuste depois da entrega, me chama e a gente acerta os detalhes.",
       en: {
         q: "Do you accept revisions after delivery?",
-        a: "Yes! All plans and packages include 3 revisions. If you need any adjustments, just let me know — I'm happy to make the video exactly how you envisioned it.",
+          a: "All plans and packages include 3 revisions. If you need an adjustment after delivery, get in touch and we'll work out the details.",
       },
     },
   ],

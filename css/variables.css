@@ -1,3 +1,11 @@
+@font-face {
+  font-family: "Inter";
+  src: url("../fonts/InterVariable.woff2") format("woff2");
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+}
+
 /* =========================================================
    Dyo — VARIÁVEIS (cores, fontes e tamanhos)
    ---------------------------------------------------------
@@ -18,15 +26,15 @@
   --color-red-strong: #c63d43;      /* vermelho mais escuro do portfólio */
 
   /* ---------- Neutros escuros ---------- */
-  --color-ink: #050505;             /* preto */
-  --color-ink-soft: #0b0b0b;        /* cartões quase pretos */
-  --color-ink-raised: #141414;      /* superfície elevada */
-  --color-ink-line: #242424;        /* linhas discretas */
+  --color-ink: #000000;             /* preto puro para os fundos principais */
+  --color-ink-soft: #191919;        /* superfície escura dos cartões */
+  --color-ink-raised: #202020;      /* superfície elevada */
+  --color-ink-line: #303030;        /* linhas discretas */
 
   /* ---------- Neutros alternativos ---------- */
-  --color-paper: #0e0e0e;           /* fundo carvão das seções alternadas */
-  --color-paper-soft: #151515;      /* cartões nas seções alternadas */
-  --color-paper-line: #2b2b2b;      /* bordas das seções alternadas */
+  --color-paper: #171717;           /* fundo carvão das seções alternadas */
+  --color-paper-soft: #1b1b1b;      /* cartões nas seções alternadas */
+  --color-paper-line: #303030;      /* bordas das seções alternadas */
 
 
   /* ---------- Textos ---------- */
@@ -36,9 +44,9 @@
   --color-text-dark-muted: #b4b2ac;
 
   /* ---------- Fontes ---------- */
-  --font-display: "Montserrat", system-ui, sans-serif;
-  --font-editorial: "Literata", Georgia, serif;
-  --font-body: "DM Sans", system-ui, sans-serif;
+  --font-display: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-editorial: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-body: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 
   /* ---------- Tamanhos e espaçamentos ---------- */
   --container: 1180px;
@@ -47,8 +55,8 @@
   --header-height: 68px;
 
   --radius-sm: 7px;
-  --radius: 12px;
-  --radius-lg: 16px;
+  --radius: 16px;
+  --radius-lg: 20px;
 
   /* ---------- Sombras ---------- */
   --shadow-soft: 0 10px 24px rgba(0, 0, 0, 0.18);
@@ -56,8 +64,11 @@
   --shadow-hard: 0 16px 36px rgba(0, 0, 0, 0.24);
 
   /* ---------- Animações ---------- */
-  --transition: 200ms ease;
-  --transition-slow: 450ms cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --transition: 200ms var(--ease-out);
+  --transition-slow: 450ms var(--ease-out);
+  --transition-press: 140ms var(--ease-out);
 
   /* ---------- Fundo escuro e feixes de luz ---------- */
   --site-tone-cool: rgba(82, 91, 108, 0.16);

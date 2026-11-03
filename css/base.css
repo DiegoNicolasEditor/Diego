@@ -232,24 +232,21 @@ h1, h2, h3, h4 {
 /* ---------- Animação de entrada (reveal) ---------- */
 .reveal {
   opacity: 0;
-  filter: blur(5px);
-  transform: translate3d(0, 24px, 0) scale(0.985);
+  transform: translate3d(0, 16px, 0);
   transition:
-    opacity 760ms cubic-bezier(0.16, 1, 0.3, 1),
-    transform 760ms cubic-bezier(0.16, 1, 0.3, 1),
-    filter 760ms cubic-bezier(0.16, 1, 0.3, 1);
+    opacity var(--transition-slow),
+    transform var(--transition-slow);
   transition-delay: var(--reveal-delay, 0ms);
 }
 .reveal.is-visible {
   opacity: 1;
-  filter: blur(0);
   transform: none;
 }
 .reveal-pending { transition: none !important; }
 .site-footer .reveal { transition-delay: var(--reveal-delay, 0ms); }
 
 /* Sem JavaScript, mostra tudo */
-.no-js .reveal { opacity: 1; filter: none; transform: none; }
+.no-js .reveal { opacity: 1; transform: none; }
 
 /* Respeita quem prefere menos animação */
 @media (prefers-reduced-motion: reduce) {
@@ -259,7 +256,7 @@ h1, h2, h3, h4 {
     transition-duration: 0.001ms !important;
     scroll-behavior: auto !important;
   }
-  .reveal { opacity: 1; filter: none; transform: none; }
+  .reveal { opacity: 1; transform: none; }
 }
 
 /* Contraste editorial: reservado às citações e ênfases pontuais. */
