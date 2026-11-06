@@ -32,6 +32,14 @@ window.SITE_CONTENT = {
   projects: [
     // --- VÍDEOS CURTOS (Shorts / Reels / TikTok) ---
     {
+      title: "Zenix Blox Fruits - Publicidade",
+      youtubeId: "grRM5oXHUM8",
+      category: "Publicidade",
+      categoryEn: "Advertising",
+      type: "short",
+      format: "vertical",
+    },
+    {
       title: "Tutorial de dribles",
       youtubeId: "gAlBlcIFumM",
       category: "Tutorial",
