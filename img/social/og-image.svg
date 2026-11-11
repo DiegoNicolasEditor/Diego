@@ -17,10 +17,5 @@
   <circle cx="600" cy="315" r="232" fill="none" stroke="#f4f3ef" stroke-opacity=".09" stroke-width="2"/>
   <path d="M376 223a242 242 0 0 1 36-49M824 407a242 242 0 0 1-36 49" fill="none" stroke="#f4f3ef" stroke-width="5" stroke-linecap="round"/>
 
-  <g transform="translate(252 206) scale(2.34)">
-    <path fill="#f4f3ef" fill-rule="evenodd" d="M8 13h52c51 0 51 94 0 94H8V13Zm26 23v48h24c25 0 25-48 0-48H34Z"/>
-    <path fill="#f4f3ef" d="M101 13h34l27 34 27-34h34l-44 55v39h-34V68l-44-55Z"/>
-    <circle cx="267" cy="60" r="38" fill="none" stroke="#f4f3ef" stroke-width="16"/>
-    <path fill="#f4f3ef" d="m258 46 25 14-25 14V46Z"/>
-  </g>
+  <text x="600" y="325" text-anchor="middle" fill="#f4f3ef" font-family="Arial, sans-serif" font-weight="bold" font-size="100">Diego Nicolas</text><text x="600" y="385" text-anchor="middle" fill="#f4f3ef" font-family="Arial, sans-serif" font-size="32">Editor de vídeos</text>
 </svg>

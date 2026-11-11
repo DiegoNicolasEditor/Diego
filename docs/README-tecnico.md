@@ -1,6 +1,6 @@
 # Estrutura técnica
 
-Site estático do DYO Studio, feito em HTML, CSS e JavaScript puro. Não
+Site estático do Diego Nicolas, feito em HTML, CSS e JavaScript puro. Não
 usa framework, pacotes ou etapa de compilação. O GitHub Pages publica
 os arquivos da raiz pela branch `main`.
 

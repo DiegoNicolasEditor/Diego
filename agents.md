@@ -1,6 +1,6 @@
 # AGENTS.md
 
-Static one-page portfolio site for "Dyo" (video editor). Plain HTML/CSS/JS, no build step, deployed on GitHub Pages from the `main` branch. The site owner is not a programmer and edits files by hand following `LEIA-ME.txt` (Portuguese) — keep that guide in sync with any structural change.
+Static one-page portfolio site for "Diego" (video editor). Plain HTML/CSS/JS, no build step, deployed on GitHub Pages from the `main` branch. The site owner is not a programmer and edits files by hand following `LEIA-ME.txt` (Portuguese) — keep that guide in sync with any structural change.
 
 ## Structure
 

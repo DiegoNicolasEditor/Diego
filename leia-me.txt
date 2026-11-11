@@ -1,5 +1,5 @@
 ﻿========================================================
-  GUIA PASSO A PASSO — SITE DYO
+  GUIA PASSO A PASSO — SITE Diego
 ========================================================
 
 Este guia explica como atualizar o portfólio sem mexer na

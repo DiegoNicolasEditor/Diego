@@ -1,5 +1,5 @@
 /* =========================================================
-   Dyo — LAYOUT
+   Diego — LAYOUT
    ---------------------------------------------------------
    Partes que se repetem em todo o site:
    cabeçalho, menu (computador e celular), faixa de
@@ -38,7 +38,7 @@ body.nav-open .site-header {
   -webkit-backdrop-filter: blur(16px);
 }
 
-/* Marca DYO */
+/* Marca Diego */
 .brand {
   display: inline-flex;
   align-items: center;

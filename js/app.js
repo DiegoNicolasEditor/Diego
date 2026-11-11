@@ -1,5 +1,5 @@
 /* =========================================================
-   Dyo — LÓGICA DO SITE
+   Diego — LÓGICA DO SITE
    Feito por: MRJGodzilla
    Ano: 2026
 

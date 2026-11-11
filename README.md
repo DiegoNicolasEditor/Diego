@@ -1,6 +1,6 @@
-# DYO Studio
+# Diego Nicolas
 
-Portfólio do Dyo, editor de vídeos. O site é feito em HTML, CSS e
+Portfólio do Diego, editor de vídeos. O site é feito em HTML, CSS e
 JavaScript e publicado automaticamente pelo GitHub Pages.
 
 ## Quer fazer uma alteração?

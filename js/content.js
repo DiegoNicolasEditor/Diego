@@ -1,5 +1,5 @@
 /* =========================================================
-   Dyo — CONTEÚDO EDITÁVEL
+   Diego — CONTEÚDO EDITÁVEL
    Feito por: MRJGodzilla
    Ano: 2026
 

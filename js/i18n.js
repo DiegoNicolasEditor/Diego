@@ -1,5 +1,5 @@
 /* =========================================================
-   DYO Studio — TRADUÇÃO PT / EN
+   Diego Nicolas — TRADUÇÃO PT / EN
    ---------------------------------------------------------
    Para trocar os textos, edite as chaves abaixo.
    Cada chave tem "pt" (português) e "en" (inglês).
@@ -9,12 +9,12 @@
    ========================================================= */
 
 window.DYO_I18N = {
-  "meta.title": { pt: "DYO Studio | Edição de vídeo", en: "DYO Studio | Video editing" },
+  "meta.title": { pt: "Diego Nicolas | Edição de vídeo", en: "Diego Nicolas | Video editing" },
   "meta.description": {
     pt: "Edição de vídeos para YouTube, TikTok, Shorts e Reels. Veja meu trabalho e fale comigo.",
     en: "Video editing for YouTube, TikTok, Shorts, and Reels. Take a look at my work and get in touch."
   },
-  "brand.home":       { pt: "DYO Studio, início", en: "DYO Studio, home" },
+  "brand.home":       { pt: "Diego Nicolas, início", en: "Diego Nicolas, home" },
   "nav.about":        { pt: "Sobre",        en: "About" },
   "nav.main":         { pt: "Navegação principal", en: "Main navigation" },
   "nav.footer":       { pt: "Navegação do rodapé", en: "Footer navigation" },
@@ -37,8 +37,8 @@ window.DYO_I18N = {
   "about.experience.headline": { pt: "Há mais de um ano trabalhando com edição de vídeo.", en: "I've been editing videos for over a year." },
   "about.specialties": { pt: "Especialidades", en: "Specialties" },
   "about.p1": {
-    pt: 'Meu nome é Diego, mas prefiro usar DYO no trabalho. Valorizo a relação com meus clientes e, além de editar os vídeos, também compartilho ideias para melhorar o conteúdo.',
-    en: "I'm Diego, though I go by DYO for work. I value a good working relationship with my clients. Alongside editing their videos, I also share ideas to help improve their content."
+    pt: 'Meu nome é Diego Nicolas. Valorizo a relação com meus clientes e, além de editar os vídeos, também compartilho ideias para melhorar o conteúdo.',
+    en: "I'm Diego Nicolas. I value a good working relationship with my clients. Alongside editing their videos, I also share ideas to help improve their content."
   },
   "about.p2": {
     pt: 'Trabalho com <strong>Shorts, Reels, TikToks</strong> e vídeos longos para <strong>YouTube</strong>. Cuido da edição do primeiro corte aos efeitos finais.',
@@ -105,7 +105,7 @@ window.DYO_I18N = {
 
   "footer.tagline": { pt: "Edição e pós-produção", en: "Editing and post-production" },
   "footer.rights":  { pt: "Todos os direitos reservados.", en: "All rights reserved." },
-  "footer.credit":  { pt: "Feito por DYO Studio", en: "Made by DYO Studio" },
+  "footer.credit":  { pt: "Feito por Diego Nicolas", en: "Made by Diego Nicolas" },
 };
 
 /* =========================================================
