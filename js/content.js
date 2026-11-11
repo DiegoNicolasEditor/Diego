@@ -102,7 +102,7 @@ window.SITE_CONTENT = {
      ========================================================= */
   contactLinks: {
     whatsapp: "https://wa.me/5521984315865",
-    instagram: "https://www.instagram.com/itsd.yoooo",
+    instagram: "https://www.instagram.com/diegonicolas2027/",
     x: "https://x.com/itsdyooooo",
     tiktok: "https://www.tiktok.com/@itsdyo",
     primary: "https://wa.me/5521984315865", // botão grande "Entrar em contato"
