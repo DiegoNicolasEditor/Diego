@@ -9,7 +9,7 @@ O passo a passo para atualizar vídeos, depoimentos, contatos e imagens
 está em [`leia-me.txt`](./leia-me.txt). Ele foi escrito para quem não
 programa.
 
-**Site:** https://digas221960-wq.github.io/dyooo/
+**Site:** https://digas221960-wq.github.io/Diego/
 
 ## Pastas principais
 

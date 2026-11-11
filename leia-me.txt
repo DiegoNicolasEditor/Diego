@@ -58,7 +58,7 @@ outra pasta: o site publicado deixaria de encontrar os arquivos.
 6. Confirme em Commit changes novamente. O GitHub publica a
    atualização automaticamente pelo GitHub Pages.
 7. Aguarde alguns minutos e confira:
-   https://digas221960-wq.github.io/dyooo/
+   https://digas221960-wq.github.io/Diego/
    Se ainda aparecer a versão antiga, atualize com Ctrl+F5.
 
 Antes de mexer, você pode abrir o site em outra aba para
@@ -300,4 +300,4 @@ Volte ao arquivo no GitHub, compare com o histórico da última
 alteração e corrija só o trecho com problema.
 
 Site publicado:
-https://digas221960-wq.github.io/dyooo/
+https://digas221960-wq.github.io/Diego/
