@@ -207,4 +207,13 @@
   .hero-portrait {
     justify-self: start;
   }
+
+  .hero-content { display: contents; }
+  .hero-title { order: 1; }
+  .hero-subtitle { order: 2; }
+  .hero-description { order: 3; }
+  .hero-portrait { order: 4; width: min(100%, 420px); margin: 0; }
+  .hero-actions { order: 5; }
+  .hero-stats { order: 6; }
+
 }
