@@ -9,7 +9,7 @@
   toggleClick.preload = "auto";
   toggleClick.volume = 0.06;
   portfolioWhoosh.preload = "auto";
-  portfolioWhoosh.volume = 0.04;
+  portfolioWhoosh.volume = 0.01;
 
   function play(sound) {
     sound.currentTime = 0;
