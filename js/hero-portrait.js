@@ -6,12 +6,12 @@
   const canTilt = window.matchMedia(
     "(any-hover: hover) and (any-pointer: fine) and (prefers-reduced-motion: no-preference)"
   );
-  let frame = 0;
+  let animationFrame = 0;
   let pointerX = 0;
   let pointerY = 0;
 
   function updateTilt() {
-    frame = 0;
+    animationFrame = 0;
     const bounds = hero.getBoundingClientRect();
     const x = Math.max(-1, Math.min(1, (pointerX - bounds.left) / bounds.width * 2 - 1));
     const y = Math.max(-1, Math.min(1, (pointerY - bounds.top) / bounds.height * 2 - 1));
@@ -20,8 +20,8 @@
   }
 
   function resetTilt() {
-    cancelAnimationFrame(frame);
-    frame = 0;
+    cancelAnimationFrame(animationFrame);
+    animationFrame = 0;
     if (!canTilt.matches) frame.style.removeProperty("transition");
     frame.style.removeProperty("transform");
   }
@@ -30,7 +30,7 @@
     if (!canTilt.matches || event.pointerType !== "mouse") return;
     pointerX = event.clientX;
     pointerY = event.clientY;
-    if (!frame) frame = requestAnimationFrame(updateTilt);
+    if (!animationFrame) animationFrame = requestAnimationFrame(updateTilt);
   }, { passive: true });
   hero.addEventListener("pointerleave", resetTilt);
   hero.addEventListener("pointercancel", resetTilt);
