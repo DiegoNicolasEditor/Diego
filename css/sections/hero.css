@@ -190,20 +190,12 @@
   justify-self: end;
 }
 
-.hero-portrait::before {
-  content: "";
-  position: absolute;
-  inset: 12px -12px -12px 12px;
-  z-index: -1;
-  border: 1px solid var(--color-text-light-muted);
-  border-radius: var(--radius-lg);
-}
-
 .hero-portrait img {
   display: block;
   width: 100%;
   height: auto;
   border-radius: var(--radius-lg);
+  box-shadow: 12px 12px 0 rgba(255, 255, 255, 0.12);
 }
 
 @media (max-width: 860px) {
